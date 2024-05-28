@@ -7,21 +7,23 @@ import { readdir } from "fs/promises";
 const getAllPluginsPlugin = {
     name: "getAllPlugins",
     setup: (build) => {
-        const filter = /\.src\/plugin\/plugins\/index\.ts/;
-        build.onResolve({ filter }, (args) => {// I GTG :SAD: ILL TTYL POOKIE IMA PUSH THI
-            S T/O GU B LUV U
+        const filter = /\.src\/plugin\/plugins\/([^i]|i[^n]|in[^d]|ind[^e]|inde[^x]|index[^.])\.ts$/;
+        build.onResolve({ filter }, async (args) => {
+            const files = await readdir(args.resolveDir);
             return {
                 path: args.path,
                 namespace: "getAllPlugins",
-            }
+            };
         });
-        build.onLoad({ filter, namespace: "getAllPlugins" }, async (args) => {
-            const files = (await readdir("src/plugin/plugins")).filter((file) => file !== "index.ts");
-            console.log(files);
+        build.onLoad({ filter: /.*/, namespace: "getAllPlugins" }, async (args) => {
             return {
-                contents: "export default [];",
+                contents: `
+                    export default [
+                        ${args.path}
+                    ];
+                `,
                 loader: "ts",
-            }
+            };
         });
     }
 }

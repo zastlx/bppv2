@@ -3,17 +3,26 @@ import { bppPlugin } from "./plugins";
 import getPlugins from ".";
 import logger from "#utils/logger";
 
-class pluginManager implements iPluginManager {
+import { hard as hardPatcher } from "#patcher";
+import Loggable from "#utils/loggable";
+
+class pluginManager extends Loggable implements iPluginManager {
     private plugins: bppPlugin[] = [];
     private inited: boolean = false;
 
+    constructor() {
+        super("PluginManager");
+    }
+
     init(): void {
-        this.plugins = getPlugins();
+        this.plugins = this.getPlugins();
+
+        const patches = this.plugins.map(plugin => plugin.patches).flat();
+
+        // Apply patches
+
+        this.log("Initialized");
         this.inited = true;
-
-        // init hard-patches here
-
-        logger.info("PluginManager", "Initialized");
     }
 
     enableAll(): void {
@@ -30,6 +39,10 @@ class pluginManager implements iPluginManager {
 
     getPlugins(): bppPlugin[] {
         return this.plugins;
+    }
+
+    hasInitialized(): boolean {
+        return this.inited;
     }
 }
 

@@ -1,10 +1,10 @@
 interface iPatch {
-    find: string;
+    find: string | RegExp;
     all?: boolean;
 
     noWarn?: boolean;
     replacement: {
-        match: RegExp;
+        match: string | RegExp;
         replace: (m, rest) => string;
     }
 }
