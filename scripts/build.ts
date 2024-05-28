@@ -19,7 +19,6 @@ const getAllPluginsPlugin: Plugin = {
     setup: (build: PluginBuild) => {
         // since esbuild uses go regex, we can't use lookbehinds or lookaheads, the hacky trick MUST be used
         const filter: RegExp = new RegExp(`src/plugin/plugins\\/${regexBuildNegativeLookahead("index")}\\.ts$`);
-        console.log(filter);
 
         build.onResolve({ filter }, async (args: OnResolveArgs) => {
             const files: string[] = await readdir(args.resolveDir);

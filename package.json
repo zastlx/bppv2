@@ -3,7 +3,7 @@
   "type": "module",
   "scripts": {
     "build": "node scripts/build.mjs",
-    "build:ts": "tsx scripts/build.ts"
+    "build:ts": "bun scripts/build.ts"
   },
   "devDependencies": {
     "@types/bun": "latest"
