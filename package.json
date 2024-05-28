@@ -1,0 +1,19 @@
+{
+  "name": "bppv2",
+  "type": "module",
+  "scripts": {
+    "build": "bun scripts/build.js"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "esbuild": "^0.21.4",
+    "spitroast": "^1.4.4"
+  }
+}
