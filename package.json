@@ -2,13 +2,14 @@
   "name": "bppv2",
   "type": "module",
   "scripts": {
-    "build": "bun scripts/build.js"
+    "build": "node scripts/build.mjs",
+    "build:ts": "tsx scripts/build.ts"
   },
   "devDependencies": {
     "@types/bun": "latest"
   },
   "peerDependencies": {
-    "typescript": "^5.0.0"
+    "typescript": "^5.4.5"
   },
   "dependencies": {
     "@types/react": "^18.3.3",

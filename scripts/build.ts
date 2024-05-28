@@ -2,11 +2,11 @@ import { OnLoadArgs, OnResolveArgs, Plugin, PluginBuild, build } from "esbuild";
 import { readdir } from "fs/promises";
 
 // builds the hacky workaround for negative lookahead so i don't have to manually write alla dat
-function regexBuildNegativeLookahead(value) {
-    const chars = value.split("");
-    let regex = "";
-    let currentPrepended = "";
-    for (let i = 0; i < chars.length; i++) {
+function regexBuildNegativeLookahead(value: string): string {
+    const chars: string[] = value.split("");
+    let regex: string = "";
+    let currentPrepended: string = "";
+    for (let i: number = 0; i < chars.length; i++) {
         currentPrepended += chars[i - 1] || "";
         regex += `${currentPrepended}[^${chars[i]}]|`;
     }
@@ -14,21 +14,21 @@ function regexBuildNegativeLookahead(value) {
     return "(?:" + regex + ")";
 }
 
-const getAllPluginsPlugin = {
+const getAllPluginsPlugin: Plugin = {
     name: "getAllPlugins",
-    setup: (build) => {
+    setup: (build: PluginBuild) => {
         // since esbuild uses go regex, we can't use lookbehinds or lookaheads, the hacky trick MUST be used
-        const filter = new RegExp(`src/plugin/plugins\\/${regexBuildNegativeLookahead("index")}\\.ts$`);
+        const filter: RegExp = new RegExp(`src/plugin/plugins\\/${regexBuildNegativeLookahead("index")}\\.ts$`);
         console.log(filter);
 
-        build.onResolve({ filter }, async (args) => {
-            const files = await readdir(args.resolveDir);
+        build.onResolve({ filter }, async (args: OnResolveArgs) => {
+            const files: string[] = await readdir(args.resolveDir);
             return {
                 path: args.path,
                 namespace: "getAllPlugins",
             };
         });
-        build.onLoad({ filter: /.*/, namespace: "getAllPlugins" }, async (args) => {
+        build.onLoad({ filter: /.*/, namespace: "getAllPlugins" }, async (args: OnLoadArgs) => {
             return {
                 contents: `
                     export default [
