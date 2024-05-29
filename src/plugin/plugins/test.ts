@@ -4,17 +4,24 @@ import { bppPlugin } from ".";
 
 class TestPlugin extends bppPlugin {
     constructor() {
-        super("Test", "1.0.0", "A test plugin", [Devs.zastix]);
+        super("Internals", "0.0.1", "A plugin handling internal features of BPP", [Devs.zastix]);
 
         this.addPatches([
             {
                 find: "import",
                 replacement: {
-                    match: /import/g,
-                    replace: "console.log(`gyat`);import"
+                    match: /from"\.\/vendor\.(.{0,})\.js";/g,
+                    replace: `from\"${location.origin}/vendor.$1.js\";`
+                }
+            },
+            // i have no idea why it trys to import itself??
+            {
+                find: "import",
+                replacement: {
+                    match: /import"\.\/index\.(.{0,})\.js";/g,
+                    replace: ""
                 }
             }
-
         ]);
     }
 

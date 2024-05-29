@@ -1,12 +1,11 @@
-type ReplaceFn = (match: string, ...groups: string[]) => string;
-
 interface iPatchReplacement {
     match: string | RegExp;
-    replace: string | ReplaceFn;
+    replace: string;
 
 }
 
 interface iPatch {
+    plugin: string;
     find: string | RegExp;
     all?: boolean;
 
@@ -14,4 +13,4 @@ interface iPatch {
     replacement: iPatchReplacement | iPatchReplacement[];
 }
 
-export { iPatch, ReplaceFn };
+export { iPatch };

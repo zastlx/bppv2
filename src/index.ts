@@ -2,6 +2,7 @@ import logger from "#utils/logger";
 
 import pluginManager from "#plugin/pluginManager";
 import events from "#utils/eventManager";
+import { PatchManager } from "#patcher/hard";
 
 logger.info("BPP", "Starting up BPP...");
 
@@ -9,6 +10,13 @@ logger.info("BPP", "Starting up BPP...");
 const pm = new pluginManager();
 pm.init();
 
+const pam = new PatchManager();
+pam.init();
+
+pam.addPatches(pm.getPlugins().map(plugin => plugin.patches).flat());
+
+// Reload the patches
+pam.softReload(true);
 
 events.dispatch("registrar.done", {
     message: "BPP is ready!",
