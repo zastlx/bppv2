@@ -4,4 +4,4 @@ const plugins: bppPlugin[] = [];
 
 //{plugins}
 
-export default plugins;
+export default () => plugins;

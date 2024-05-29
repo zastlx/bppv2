@@ -13,9 +13,9 @@ class pluginManager extends Loggable implements iPluginManager {
     constructor() {
         super("PluginManager");
     }
-
+    ww
     init(): void {
-        this.plugins = this.getPlugins();
+        this.plugins = getPlugins();
 
         const patches = this.plugins.map(plugin => plugin.patches).flat();
 
