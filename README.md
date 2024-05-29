@@ -66,9 +66,22 @@
 **Patching**
 - **[EXPERIMENTAL]** Soft refresh and patch - *This way, we can apply patches to Blacket even after Blacket has fully loaded*
 - **[REMOVED]** ~~The option to hard refresh, intercept and patch for Tampermonkey users.~~
+
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   
+
+# Built-in or Official Plugins
+- *InternalsPlugin* - Does not provide special features, but handles BPP's internal functions.
+- **Brainstorming/Under Review**
+    - **[BRAINSTORMING]** *SafePlugin* - Provides functionality to make Blacket completely safe for children, preventing curse words from being sent and censoring curse words in received messages and automatically identifying and deleting messages with adult content via NSFWJS.
+    - **[BRAINSTORMING]** *StaffPlugin* - Allows staff to blacklist and automatically delete messages with certain blacklisted words or phrases and have an easy GUI to monitor and moderate chat from anywhere and ban and mute members from any page.
+    - **[BRAINSTORMING]** *PackSpammerPlugin* - *Follows EULA, pack spammers were allowed by Syfe.* Allows users to spam-open packs at an acceptable rate-limit.
+    - **[BRAINSTORMING]** *BazaarNotifierPlugin* - *Follows EULA, does not automate buying.* Notifies users about new deals on the bazaar/auction house instead of automatically buying them at an acceptable ratelimit.
+
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+
 # Supporting
 **The developers would like to acknowledge and publicly support the following groups/movements**:   
 <img height="30" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSI4XyT-Kdrs9ItleNPGGIWvdbkOP2mdBQ9Ig&s"> The developers support, acknowledge, and care about those who are transgender or questioning.   
