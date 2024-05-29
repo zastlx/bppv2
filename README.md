@@ -62,3 +62,14 @@
 **Patching**
 - **[EXPERIMENTAL]** Soft refresh and patch - *This way, we can apply patches to Blacket even after Blacket has fully loaded*
 - **[REMOVED]** ~~The option to hard refresh, intercept and patch for Tampermonkey users.~~
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   
+# Supporting
+**The developers would like to acknowledge and publicly support the following groups/movements**:   
+<img height="30" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSI4XyT-Kdrs9ItleNPGGIWvdbkOP2mdBQ9Ig&s"> The developers support, acknowledge, and care about those who are transgender or questioning.   
+<img height="30" src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Nonbinary_flag.svg/255px-Nonbinary_flag.svg.png"> The developers support, acknowledge, and care about those who are non-binary or questioning.   
+<img height="30" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Gay_Pride_Flag.svg/1200px-Gay_Pride_Flag.svg.png"> The developers support the rest of the LGBTQ+ community or those who are questioning.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   
