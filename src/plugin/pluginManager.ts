@@ -19,8 +19,6 @@ class pluginManager extends Loggable implements iPluginManager {
 
         const patches = this.plugins.map(plugin => plugin.patches).flat();
 
-        // Apply patches
-
         this.log("Initialized");
         this.inited = true;
     }
