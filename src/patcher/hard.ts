@@ -49,12 +49,12 @@ class PatchManager extends Loggable {
             });
 
             for (let patch of patches) {
-                file.patchedBy.push(patch.plugin);
+                if (!file.patchedBy.includes(patch.plugin)) file.patchedBy.push(patch.plugin);
 
                 if (Array.isArray(patch.replacement))
                     for (let replacement of patch.replacement)
-                        file.patched = file.patched.replace(replacement.match, replacement.replace);
-                else file.patched = file.patched.replace(patch.replacement.match, patch.replacement.replace);
+                        file.patched = file.patched.replace(replacement.match, replacement.replace.replaceAll("$self", `window.BPP.pluginManager.getPlugin("${patch.plugin}")`));
+                else file.patched = file.patched.replace(patch.replacement.match, patch.replacement.replace.replaceAll("$self", `window.BPP.pluginManager.getPlugin("${patch.plugin}")`));
             }
         }
     }

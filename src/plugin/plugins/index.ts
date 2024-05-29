@@ -31,6 +31,6 @@ export abstract class bppPlugin extends Loggable implements iPlugin {
         this.patches.push(..._patches);
     }
 
-    abstract onEnable(): void;
-    abstract onDisable(): void;
+    onEnable(): void { };
+    onDisable(): void { };
 }

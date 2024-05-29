@@ -17,3 +17,4 @@ class Events {
 
 const events = new Events();
 export default events;
+export { Events };

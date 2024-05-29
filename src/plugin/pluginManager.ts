@@ -6,7 +6,7 @@ import logger from "#utils/logger";
 import { hard as hardPatcher } from "#patcher";
 import { Loggable } from "#utils/logger";
 
-class pluginManager extends Loggable implements iPluginManager {
+class PluginManager extends Loggable implements iPluginManager {
     private plugins: bppPlugin[] = [];
     private inited: boolean = false;
 
@@ -42,4 +42,4 @@ class pluginManager extends Loggable implements iPluginManager {
     }
 }
 
-export default pluginManager;
+export default PluginManager;

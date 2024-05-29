@@ -1,17 +1,31 @@
-import logger from "#utils/logger";
+import logger, { Loggable } from "#utils/logger";
 
-import pluginManager from "#plugin/pluginManager";
+import PluginManager from "#plugin/pluginManager";
 import events from "#utils/eventManager";
 import { PatchManager } from "#patcher/hard";
+import { Devs, devsArray } from "#utils/consts";
 
 logger.info("BPP", "Starting up BPP...");
 
 
-const pm = new pluginManager();
+const pm = new PluginManager();
 pm.init();
 
 const pam = new PatchManager();
 pam.init();
+
+window.BPP = {
+    pluginManager: pm,
+    patchManager: pam,
+    consts: {
+        Devs,
+        devsArray
+    },
+    utils: {
+        logger,
+        events
+    }
+};
 
 pam.addPatches(pm.getPlugins().map(plugin => plugin.patches).flat());
 

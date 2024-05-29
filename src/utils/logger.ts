@@ -36,5 +36,6 @@ class Loggable {
 
 export default logger;
 export {
-    Loggable
+    Loggable,
+    Logger
 };

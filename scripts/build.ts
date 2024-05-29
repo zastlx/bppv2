@@ -33,7 +33,7 @@ await build({
     format: "esm",
     target: ["esnext"],
     plugins: [getAllPluginsPlugin],
-    minify: false,
+    minify: true,
     footer: {
         js: "// made with ❤️ by zastix and allie, https://github.com/zastlx/bppv2"
     },
