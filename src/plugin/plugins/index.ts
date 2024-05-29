@@ -1,5 +1,5 @@
 import { iPlugin, iPatch, iDev } from "#types";
-import Loggable from "#utils/loggable";
+import { Loggable } from "#utils/logger";
 
 export abstract class bppPlugin extends Loggable implements iPlugin {
     public readonly name: string;

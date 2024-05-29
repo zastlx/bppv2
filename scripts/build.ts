@@ -1,5 +1,6 @@
 import { OnLoadArgs, OnResolveArgs, Plugin, PluginBuild, build } from "esbuild";
 import { readdir } from "fs/promises";
+import { join } from "path";
 
 // builds the hacky workaround for negative lookahead so i don't have to manually write alla dat
 function regexBuildNegativeLookahead(value: string): string {
@@ -18,23 +19,29 @@ const getAllPluginsPlugin: Plugin = {
     name: "getAllPlugins",
     setup: (build: PluginBuild) => {
         // since esbuild uses go regex, we can't use lookbehinds or lookaheads, the hacky trick MUST be used
-        const filter: RegExp = new RegExp(`src/plugin/plugins\\/${regexBuildNegativeLookahead("index")}\\.ts$`);
-
+        //const filter: RegExp = new RegExp(`src/plugin/plugins\\/${regexBuildNegativeLookahead("index")}\\.ts$`);
+        const filter = /^~plugins$/;
         build.onResolve({ filter }, async (args: OnResolveArgs) => {
             const files: string[] = await readdir(args.resolveDir);
+            console.log(args);
             return {
                 path: args.path,
                 namespace: "getAllPlugins",
             };
         });
         build.onLoad({ filter: /.*/, namespace: "getAllPlugins" }, async (args: OnLoadArgs) => {
+            console.log(args);
+            const files: string[] = (await readdir("src/plugin/plugins"));
+            console.log(files);
+            let code = files.reduce((a, b) => {
+                if (b === "index.ts") return a;
+                return `import ${b.replace(".ts", "")}Plugin from "plugin/plugins/${b}"\n` + a;
+            }, "")
+            code += `export default () => [${files.filter(file => file !== "index.ts").map(file => file.replace(".ts", "").concat("Plugin")).join(", ")}];`
+            console.log(code);
             return {
-                contents: `
-                    export default [
-                        ${args.path}
-                    ];
-                `,
-                loader: "ts",
+                contents: code,
+                resolveDir: "./src/",
             };
         });
     }
@@ -46,6 +53,9 @@ await build({
     format: "esm",
     target: ["esnext"],
     plugins: [getAllPluginsPlugin],
-    minify: true,
+    minify: false,
+    footer: {
+        js: "// made with ❤️ by zastix and allie, https://github.com/zastlx/bppv2"
+    },
     outfile: "dist/out.js",
 });

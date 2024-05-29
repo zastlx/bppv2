@@ -1,10 +1,10 @@
 import { iPluginManager } from "#types";
 import { bppPlugin } from "./plugins";
-import getPlugins from ".";
+import getPlugins from "~plugins";
 import logger from "#utils/logger";
 
 import { hard as hardPatcher } from "#patcher";
-import Loggable from "#utils/loggable";
+import { Loggable } from "#utils/logger";
 
 class pluginManager extends Loggable implements iPluginManager {
     private plugins: bppPlugin[] = [];

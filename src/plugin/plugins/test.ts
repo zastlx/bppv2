@@ -29,4 +29,4 @@ class TestPlugin extends bppPlugin {
     };
 };
 
-export default { TestPlugin };
+export default new TestPlugin();
