@@ -6,15 +6,16 @@ class TestPlugin extends bppPlugin {
     constructor() {
         super("Test", "1.0.0", "A test plugin", [Devs.zastix]);
 
-        this.addPatch({
-            find: "import\"",
-            replacement: {
-                match: "import\"",
-                replace: (m, rest) => {
-                    return "console.log('Hi, I am an example patch!');\n" + m
+        this.addPatches([
+            {
+                find: "import",
+                replacement: {
+                    match: /import/g,
+                    replace: "console.log(`gyat`);import"
                 }
             }
-        });
+
+        ]);
     }
 
     onEnable(): void {

@@ -7,14 +7,12 @@ interface HTMLScriptElement extends HTMLElement {
 }
 
 export default async function softRefresh() {
-    document.open()
     let dom: Document = new DOMParser().parseFromString(await (await fetch(document.location.href)).text(), "text/html");
     const scripts = [...dom.head.getElementsByTagName("script")].map(x => x.cloneNode());
     [...dom.head.children].forEach(x => {
         if (x.tagName === "SCRIPT") x.remove();
     });
     document.write(dom.documentElement.innerHTML);
-    document.close();
     for (let x of scripts) {
         let script = x as HTMLScriptElement;
         if (script.nodeType !== 1) continue;

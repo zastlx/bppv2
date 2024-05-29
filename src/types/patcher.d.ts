@@ -1,12 +1,17 @@
+type ReplaceFn = (match: string, ...groups: string[]) => string;
+
+interface iPatchReplacement {
+    match: string | RegExp;
+    replace: string | ReplaceFn;
+
+}
+
 interface iPatch {
     find: string | RegExp;
     all?: boolean;
 
     noWarn?: boolean;
-    replacement: {
-        match: string | RegExp;
-        replace: (m, rest) => string;
-    }
+    replacement: iPatchReplacement | iPatchReplacement[];
 }
 
-export { iPatch };
+export { iPatch, ReplaceFn };
