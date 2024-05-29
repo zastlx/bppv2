@@ -106,6 +106,29 @@
          result="composite2"
          id="feComposite37476" />
     </filter>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient30649-8"
+       id="linearGradient2006"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(-18.928608,1.459338)"
+       x1="40.254189"
+       y1="105"
+       x2="169.7458"
+       y2="105" />
+    <filter
+       style="color-interpolation-filters:sRGB;"
+       inkscape:label="Blur"
+       id="filter2201"
+       x="-0.071789265"
+       y="-0.22807853"
+       width="1.1435785"
+       height="1.4561571">
+      <feGaussianBlur
+         stdDeviation="5 5"
+         result="blur"
+         id="feGaussianBlur2199" />
+    </filter>
   </defs>
   <g
      inkscape:label="Layer 1"
@@ -114,7 +137,7 @@
      transform="translate(-3.6831395,-60.954361)">
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:56.4444px;line-height:1.25;font-family:sans-serif;fill:url(#linearGradient30651);fill-opacity:1;stroke:none;stroke-width:0.264583;filter:url(#filter37478)"
+       style="font-style:normal;font-weight:normal;font-size:56.4444px;line-height:1.25;font-family:sans-serif;fill:url(#linearGradient30651);fill-opacity:1;stroke:none;stroke-width:0.264583;filter:url(#filter2201)"
        x="20.457418"
        y="119.59341"
        id="text2541"><tspan
@@ -125,5 +148,18 @@
          y="119.59341">bpp<tspan
    style="font-size:56.4444px;baseline-shift:sub;fill:url(#linearGradient30651);fill-opacity:1"
    id="tspan22301">v2</tspan></tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:56.4444px;line-height:1.25;font-family:sans-serif;fill:url(#linearGradient2006);fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="20.457415"
+       y="119.59341"
+       id="text2541-5"><tspan
+         sodipodi:role="line"
+         id="tspan2539-3"
+         style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:56.4444px;font-family:monospace;-inkscape-font-specification:'monospace Bold Italic';fill:url(#linearGradient2006);fill-opacity:1;stroke-width:0.264583"
+         x="20.457415"
+         y="119.59341">bpp<tspan
+   style="font-size:56.4444px;baseline-shift:sub;fill:url(#linearGradient2006);fill-opacity:1"
+   id="tspan22301-5">v2</tspan></tspan></text>
   </g>
 </svg>
