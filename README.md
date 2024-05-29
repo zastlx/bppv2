@@ -1,6 +1,10 @@
 ![BPP](branding/logo.png)
 # BPP
-*is a Blacket modification providing in-browser and userscript support. It uses modern standards, provides innovative features, and provides features for easy development of official and user-made plugins.*   
+- ***is** a Blacket modification providing in-browser and userscript support. It uses modern standards, provides innovative features, and provides features for easy development of official and user-made plugins.*
+- ***is** easy-to-use and customizable in an accessible and simple manner.*
+- *is **NOT** a hack or cheat violating EULA, but rather a safe and acceptable utility providing support for many modifications following the EULA.*
+
+   
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   
