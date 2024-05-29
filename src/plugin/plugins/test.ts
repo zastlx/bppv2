@@ -1,13 +1,10 @@
 // ./index.ts
+import { Devs } from "#utils/consts";
 import { bppPlugin } from ".";
 
 class TestPlugin extends bppPlugin {
     constructor() {
-        super("Test", "1.0.0", "A test plugin", [{
-            id: "0",
-            name: "zastix",
-            avatar: "https://avatars.githubusercontent.com/u/135683847?v=4"
-        }]);
+        super("Test", "1.0.0", "A test plugin", [Devs.zastix]);
 
         this.addPatch({
             find: "import\"",

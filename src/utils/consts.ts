@@ -1,16 +1,16 @@
-import { iDev } from "#types/consts";
-
-const Devs: iDev[] = [
-    {
+const Devs = {
+    zastix: {
         name: "zastix",
         id: "17153937091571944",
-        avatar: "https://zastix.club/resources/pfps/pfp_crop.png"
+        avatar: "https://zastix.club/resources/pfps/pfp_crop.png",
     },
-    {
+    allie: {
         name: "allie",
         id: "idk",
-        avatar: "idk"
+        avatar: "idk",
     }
-];
+}
 
-export { Devs };
+const devsArray = Object.values(Devs);
+console.log(devsArray)
+export { Devs, devsArray };
