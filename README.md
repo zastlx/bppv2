@@ -36,8 +36,6 @@
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 ## Doing
-**Managers**
-- **[IN PROGRESS]** Managers - *PatchManager*
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 ## Implemented
@@ -52,7 +50,7 @@
 
 ---
 **Managers**
-- **[GOOD]** Managers - *PluginManager*
+- **[GOOD]** Managers - *PluginManager, PatchManager*
 
 ---
 **Patcher**
