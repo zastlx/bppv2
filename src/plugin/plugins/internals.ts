@@ -17,7 +17,7 @@ class InternalsPlugin extends bppPlugin {
                     // i have no idea why it trys to import itself??
                     {
                         match: /import"\.\/index\.(.{0,})\.js";/,
-                        replace: ""
+                        replace: "$self.blacketScope=(a)=>eval(a);"
                     },
                     {
                         match: /import\{(.{0,})\}from"\.\/vendor\.(.{0,10})\.js\"/,
@@ -44,6 +44,7 @@ class InternalsPlugin extends bppPlugin {
 
         // softpatching vendors can occur here
     }
+    blacketScope(txt: string): any { }
     vendors: { [key: string]: any };
     vendorsNormalized: {
         React: typeof React,
