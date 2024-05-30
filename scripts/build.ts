@@ -51,7 +51,7 @@ await build({
     plugins: [getAllPluginsPlugin],
     minify: true,
     footer: {
-        js: "//made with ❤️ by zastix and allie, https://github.com/zastlx/bppv2"
+        js: "// made with ❤️ by zastix and allie, https://github.com/zastlx/bppv2"
     },
     sourcemap: true,
     outfile: "dist/bpp.min.js",
