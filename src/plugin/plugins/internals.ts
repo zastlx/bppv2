@@ -26,7 +26,7 @@ class InternalsPlugin extends bppPlugin {
                         match: /import\{(.{0,})\}from"\.\/vendor\.(.{0,10})\.js\"/,
                         replace: (match, ...groups) => {
                             // im sorry for anyone who has to read this
-                            return `$self._vendors=await import(\"${location.origin}/vendor.$2.js\");$self.handleVendors();const {${Object.entries([...groups[0].matchAll(/(.{0,1}) as (.{0,1})/g)].reduce((a, [, key, val]) => (a[key] = val, a), {})).reduce((c, d) => c + `${d[0]}:${d[1]},`, "").slice(0, -1)}}=BPP.pluginManager.getPlugin("Internals").vendors;`;
+                            return `$self.vendors={};$self.vendors._vendors=await import(\"${location.origin}/vendor.$2.js\");$self.handleVendors();const {${Object.entries([...groups[0].matchAll(/(.{0,1}) as (.{0,1})/g)].reduce((a, [, key, val]) => (a[key] = val, a), {})).reduce((c, d) => c + `${d[0]}:${d[1]},`, "").slice(0, -1)}}=BPP.pluginManager.getPlugin("Internals").vendors.vendors;`;
                         }
                     },
                 ]
@@ -43,39 +43,39 @@ class InternalsPlugin extends bppPlugin {
             //ReactHelmet: "Helmet does not support rendering"
         };
 
-        this.vendors = Object.fromEntries(Object.entries(this._vendors));
-
-        this.vendorsNormalized = {
-            React: Object.values(this.vendors).find(vendor => vendor[checks.React]) as (typeof React),
-            ReactDOM: Object.values(this.vendors).find(vendor => vendor.toString().includes(checks.ReactDOM)) as (typeof ReactDOM),
-            Phaser: Object.values(this.vendors).find(vendor => vendor[checks.Phaser]) as (typeof Phaser),
-            SocketIOClient: Object.values(this.vendors).find(vendor => vendor[checks.SocketIOClient]) as (typeof SocketIOClient),
+        this.vendors.vendors = Object.fromEntries(Object.entries(this.vendors._vendors));
+        this.vendors.normalized = {
+            React: Object.values(this.vendors.vendors).find(vendor => vendor[checks.React]) as (typeof React),
+            ReactDOM: Object.values(this.vendors.vendors).find(vendor => vendor.toString().includes(checks.ReactDOM)) as (typeof ReactDOM),
+            Phaser: Object.values(this.vendors.vendors).find(vendor => vendor[checks.Phaser]) as (typeof Phaser),
+            SocketIOClient: Object.values(this.vendors.vendors).find(vendor => vendor[checks.SocketIOClient]) as (typeof SocketIOClient),
         }
-
-        this.vendorsMap = {
-            React: Object.keys(this.vendors).find(vendor => this.vendors[vendor] === this.vendorsNormalized.React),
-            ReactDOM: Object.keys(this.vendors).find(vendor => this.vendors[vendor] === this.vendorsNormalized.ReactDOM),
-            Phaser: Object.keys(this.vendors).find(vendor => this.vendors[vendor] === this.vendorsNormalized.Phaser),
-            SocketIOClient: Object.keys(this.vendors).find(vendor => this.vendors[vendor] === this.vendorsNormalized.SocketIOClient),
+        this.vendors.map = {
+            React: Object.keys(this.vendors.vendors).find(vendor => this.vendors[vendor] === this.vendors.normalized.React),
+            ReactDOM: Object.keys(this.vendors.vendors).find(vendor => this.vendors[vendor] === this.vendors.normalized.ReactDOM),
+            Phaser: Object.keys(this.vendors.vendors).find(vendor => this.vendors[vendor] === this.vendors.normalized.Phaser),
+            SocketIOClient: Object.keys(this.vendors.vendors).find(vendor => this.vendors[vendor] === this.vendors.normalized.SocketIOClient),
         }
 
         // softpatching vendors can occur here
 
     }
     blacketScope(txt: string): any { }
-    _vendors: { [key: string]: any };
-    vendors: { [key: string]: any };
-    vendorsMap: {
-        React: string,
-        ReactDOM: string,
-        Phaser: string,
-        SocketIOClient: string
-    }
-    vendorsNormalized: {
-        React: typeof React,
-        ReactDOM: typeof ReactDOM,
-        Phaser: typeof Phaser,
-        SocketIOClient: typeof SocketIOClient
+    vendors: {
+        vendors: { [key: string]: any },
+        _vendors: { [key: string]: any },
+        normalized: {
+            React: typeof React,
+            ReactDOM: typeof ReactDOM,
+            Phaser: typeof Phaser,
+            SocketIOClient: typeof SocketIOClient
+        },
+        map: {
+            React: string,
+            ReactDOM: string,
+            Phaser: string,
+            SocketIOClient: string
+        },
     };
 };
 

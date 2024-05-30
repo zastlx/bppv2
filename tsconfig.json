@@ -11,12 +11,12 @@
     "resolveJsonModule": true,
     "noEmit": true,
     "jsx": "react",
-    "jsxFactory": "window.BPP.pluginManager.pluginList.Internals.vendorsNormalized.React.createElement",
+    "jsxFactory": "window.BPP.pluginManager.pluginList.Internals.vendors.normalized.React.createElement",
     "baseUrl": "./src/",
     "paths": {
         "#*": ["./*"]
     }
   },
-  "include": ["src/**/*", "src/types/types.d.ts", "types/**/*"],
+  "include": ["src/**/*", "src/types/types.d.ts"],
   "exclude": ["node_modules"],
 }
