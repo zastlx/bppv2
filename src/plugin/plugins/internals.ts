@@ -29,6 +29,11 @@ class InternalsPlugin extends bppPlugin {
                             return `$self.vendors={};$self.vendors._vendors=await import(\"${location.origin}/vendor.$2.js\");$self.handleVendors();const {${Object.entries([...groups[0].matchAll(/(.{0,1}) as (.{0,1})/g)].reduce((a, [, key, val]) => (a[key] = val, a), {})).reduce((c, d) => c + `${d[0]}:${d[1]},`, "").slice(0, -1)}}=BPP.pluginManager.getPlugin("Internals").vendors.vendors;`;
                         }
                     },
+                    // replace the store link with the BPP link
+                    {
+                        match: /{to:"\/store",icon:"fas fa-cart-shopping",className:(.{0,3}),backgroundColor:"#2b22c2",children:"Visit Store"}/,
+                        replace: "{to:\"/bpp\",icon:\"fas fa-plus\",className:$1,backgroundColor:\"#ff00d8\",children:\"BPP\"}"
+                    }
                 ]
             }
         ]);
@@ -51,10 +56,10 @@ class InternalsPlugin extends bppPlugin {
             SocketIOClient: Object.values(this.vendors.vendors).find(vendor => vendor[checks.SocketIOClient]) as (typeof SocketIOClient),
         }
         this.vendors.map = {
-            React: Object.keys(this.vendors.vendors).find(vendor => this.vendors[vendor] === this.vendors.normalized.React),
-            ReactDOM: Object.keys(this.vendors.vendors).find(vendor => this.vendors[vendor] === this.vendors.normalized.ReactDOM),
-            Phaser: Object.keys(this.vendors.vendors).find(vendor => this.vendors[vendor] === this.vendors.normalized.Phaser),
-            SocketIOClient: Object.keys(this.vendors.vendors).find(vendor => this.vendors[vendor] === this.vendors.normalized.SocketIOClient),
+            React: Object.keys(this.vendors.vendors).find(vendor => this.vendors.vendors[vendor] === this.vendors.normalized.React),
+            ReactDOM: Object.keys(this.vendors.vendors).find(vendor => this.vendors.vendors[vendor] === this.vendors.normalized.ReactDOM),
+            Phaser: Object.keys(this.vendors.vendors).find(vendor => this.vendors.vendors[vendor] === this.vendors.normalized.Phaser),
+            SocketIOClient: Object.keys(this.vendors.vendors).find(vendor => this.vendors.vendors[vendor] === this.vendors.normalized.SocketIOClient),
         }
 
         // softpatching vendors can occur here
