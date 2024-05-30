@@ -21,16 +21,15 @@
     - *Optionally* - Provide an external repository for optional, official plugins to reduce script size.
 - **[PLANNING/BRAINSTORMING]** Start API wrapper
     - **MAKE SURE THIS IS SIMPLE** - Developing plugins should be motivating and encouraging rather than worrying and confusing.
-- **[PLANNING/BRAINSTORMING]** Start theming support
+- **[IN PROGRESS]** Start theming support
     - Start reverse-engineering class names for BPP UI and Blacket UI.
          - So users have an easier time theming Blacket through explanative variable names rather than confusing classes.
-    - Start CSS parser - **OR**: @zastlx is looking into the cost of bundling a SASS compiler.
+    - **[DONE]** ~~Start CSS parser - **OR**: @zastlx is looking into the cost of bundling a SASS compiler.~~
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
 ## Planned
 **Customizations**
-- **[PLANNING/BRAINSTORMING]** User themes with extreme support for easy, extensible UI customization through defined variables and presets for BPP and Blacket's UI classes.
 - **[APPROVED BY XOTIC, PLANNING]** User-defined (third-party) plugins
 
 ---
@@ -40,6 +39,7 @@
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 ## Doing
+- **[IN PROGRESS]** User themes with extreme support for easy, extensible UI customization through defined variables and presets for BPP and Blacket's UI classes.
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 ## Implemented
