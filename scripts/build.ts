@@ -1,5 +1,7 @@
 import { OnLoadArgs, OnResolveArgs, Plugin, PluginBuild, build } from "esbuild";
-import { readdir } from "fs/promises";
+import { readdir, readFile, writeFile } from "fs/promises";
+
+const userScriptBanner = await readFile("./scripts/banner.txt");
 
 const getAllPluginsPlugin: Plugin = {
     name: "getAllPlugins",
@@ -33,10 +35,28 @@ await build({
     format: "iife",
     target: ["esnext"],
     plugins: [getAllPluginsPlugin],
+    minify: false,
+    footer: {
+        js: "//made with ❤️ by zastix and allie, https://github.com/zastlx/bppv2"
+    },
+    sourcemap: false,
+    outfile: "dist/bpp.full.js",
+});
+
+await build({
+    entryPoints: ["src/index.ts"],
+    bundle: true,
+    format: "iife",
+    target: ["esnext"],
+    plugins: [getAllPluginsPlugin],
     minify: true,
     footer: {
         js: "//made with ❤️ by zastix and allie, https://github.com/zastlx/bppv2"
     },
     sourcemap: true,
-    outfile: "dist/bpp.js",
+    outfile: "dist/bpp.min.js",
 });
+
+let userScriptCode = `${userScriptBanner}\n${await readFile("dist/bpp.min.js")}`;
+
+await writeFile("dist/bpp.user.js", userScriptCode.replaceAll("//# sourceMappingURL=bpp.js.map", ""));

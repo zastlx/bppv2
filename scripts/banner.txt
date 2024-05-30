@@ -1,0 +1,16 @@
+// ==UserScript==
+// @name         Blacket++
+// @description  the best client modification for blacket
+// @version      0.0.0
+// @icon         https://blacket.org/content/logo.png
+
+// @author       zastix & allie
+// @namespace    https://bpp.zastix.club
+
+// @match        *://rewrite.blacket.org/*
+// @match        *://159.65.251.176:3000/*
+// @match        *://localhost:3000/*
+
+// @grant        none
+// @run-at document-end
+// ==/UserScript==
