@@ -1,7 +1,8 @@
+type ReplaceFn = (match: string, ...groups: string[]) => string;
+
 interface iPatchReplacement {
     match: string | RegExp;
-    replace: string;
-
+    replace: string | ReplaceFn;
 }
 
 interface iPatch {

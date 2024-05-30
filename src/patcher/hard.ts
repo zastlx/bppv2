@@ -52,9 +52,15 @@ class PatchManager extends Loggable {
                 if (!file.patchedBy.includes(patch.plugin)) file.patchedBy.push(patch.plugin);
 
                 if (Array.isArray(patch.replacement))
-                    for (let replacement of patch.replacement)
-                        file.patched = file.patched.replace(replacement.match, replacement.replace.replaceAll("$self", `window.BPP.pluginManager.getPlugin("${patch.plugin}")`));
-                else file.patched = file.patched.replace(patch.replacement.match, patch.replacement.replace.replaceAll("$self", `window.BPP.pluginManager.getPlugin("${patch.plugin}")`));
+                    for (let replacement of patch.replacement) {
+                        if (replacement.replace instanceof Function) file.patched = file.patched.replace(replacement.match, replacement.replace(file.patched.match(replacement.match)[0], ...file.patched.match(replacement.match).slice(1))).replaceAll("$self", `window.BPP.pluginManager.getPlugin("${patch.plugin}")`);
+                        else file.patched = file.patched.replace(replacement.match, replacement.replace).replaceAll("$self", `window.BPP.pluginManager.getPlugin("${patch.plugin}")`);
+                    }
+                //file.patched = file.patched.replace(replacement.match, replacement.replace.replaceAll("$self", `window.BPP.pluginManager.getPlugin("${patch.plugin}")`));
+                else {
+                    if (patch.replacement.replace instanceof Function) file.patched = patch.replacement.replace(file.patched.match(patch.replacement.match)[0], ...file.patched.match(patch.replacement.match).slice(1)).replaceAll("$self", `window.BPP.pluginManager.getPlugin("${patch.plugin}")`);
+                    else file.patched = file.patched.replace(patch.replacement.match, patch.replacement.replace).replaceAll("$self", `window.BPP.pluginManager.getPlugin("${patch.plugin}")`);
+                }
             }
         }
     }

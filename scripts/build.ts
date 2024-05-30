@@ -30,10 +30,23 @@ const getAllPluginsPlugin: Plugin = {
 await build({
     entryPoints: ["src/index.ts"],
     bundle: true,
-    format: "esm",
+    format: "iife",
     target: ["esnext"],
     plugins: [getAllPluginsPlugin],
     minify: true,
+    footer: {
+        js: "// made with ❤️ by zastix and allie, https://github.com/zastlx/bppv2"
+    },
+    outfile: "dist/out.min.js",
+});
+
+await build({
+    entryPoints: ["src/index.ts"],
+    bundle: true,
+    format: "iife",
+    target: ["esnext"],
+    plugins: [getAllPluginsPlugin],
+    minify: false,
     footer: {
         js: "// made with ❤️ by zastix and allie, https://github.com/zastlx/bppv2"
     },
