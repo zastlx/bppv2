@@ -8,6 +8,9 @@ import { Loggable } from "#utils/logger";
 
 class PluginManager extends Loggable implements iPluginManager {
     private plugins: bppPlugin[] = [];
+    public pluginList: {
+        [name: string]: bppPlugin
+    } = {};
     private inited: boolean = false;
 
     constructor() {
@@ -16,6 +19,7 @@ class PluginManager extends Loggable implements iPluginManager {
 
     init(): void {
         this.plugins = getPlugins();
+        this.pluginList = this.plugins.reduce((a, b) => (a[b.name] = b, a), {});
 
         this.log("Initialized");
         this.inited = true;

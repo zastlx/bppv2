@@ -14,6 +14,7 @@ pm.init();
 const pam = new PatchManager();
 pam.init();
 
+console.log("BPP is ready!");
 window.BPP = {
     pluginManager: pm,
     patchManager: pam,
@@ -26,6 +27,7 @@ window.BPP = {
         events
     }
 };
+console.log(window.BPP);
 
 pam.addPatches(pm.getPlugins().map(plugin => plugin.patches).flat());
 

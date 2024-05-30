@@ -1,17 +1,14 @@
-// ./index.ts
 import React from "react";
 import ReactDOM from "react-dom";
 
 import { Devs } from "#utils/consts";
 import { bppPlugin } from ".";
-import { before } from "spitroast";
 
 class InternalsPlugin extends bppPlugin {
     constructor() {
         super("Internals", "0.0.1", "A plugin handling internal features of BPP", [Devs.zastix]);
 
-
-
+        // we really need to move mose of this plugins functionality into bpp itself, i dont think its nice having one plugin for all off the internal patches, we need to refactor at some point
         this.addPatches([
             {
                 // this was a string that im 99% sure wont match any file execpt index, if v2 implments code splitting this will be updated
@@ -29,10 +26,6 @@ class InternalsPlugin extends bppPlugin {
                             return `$self.vendors=await import(\"${location.origin}/vendor.$2.js\");$self.handleVendors();const {${Object.entries([...groups[0].matchAll(/(.{0,1}) as (.{0,1})/g)].reduce((a, [, key, val]) => (a[key] = val, a), {})).reduce((c, d) => c + `${d[0]}:${d[1]},`, "").slice(0, -1)}}=BPP.pluginManager.getPlugin("Internals").vendors;`;
                         }
                     }
-                    /*{
-                        match: /from"\.\/vendor\.(.{0,})\.js";/g,
-                        replace: `from\"${location.origin}/vendor.$1.js\";$self.vendors=await import(\"${location.origin}/vendor.$1.js\");$self.handleVendors();`
-                    }*/
                 ]
             }
         ]);

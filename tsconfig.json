@@ -10,7 +10,8 @@
     "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
     "noEmit": true,
-    "jsx": "react-jsx",
+    "jsx": "react",
+    "jsxFactory": "window.BPP.pluginManager.pluginList.Internals.vendorsNormalized.React.createElement",
     "baseUrl": "./src/",
     "paths": {
         "#*": ["./*"]
