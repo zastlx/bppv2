@@ -5,11 +5,10 @@ module.exports = {
     extends: [
         "eslint:recommended",
         "plugin:@typescript-eslint/recommended",
-        "plugin:react-hooks/recommended",
+        "plugin:react-hooks/recommended"
     ],
-    ignorePatterns: ["dist", ".eslintrc.cjs"],
+    ignorePatterns: ["dist", "*.cjs", "src/types/**"],
     parser: "@typescript-eslint/parser",
-    ignorePatterns: ["dist", "src/types/**"],
     plugins: ["@typescript-eslint/eslint-plugin", "@stylistic"],
     rules: {
         // TypeScript Rules
@@ -18,7 +17,7 @@ module.exports = {
         "@typescript-eslint/explicit-function-return-type": "off",
         "@typescript-eslint/explicit-module-boundary-types": "off",
         "@typescript-eslint/no-explicit-any": "off",
-        "@typescript-eslint/no-unused-vars": "warn",
+        "@typescript-eslint/no-unused-vars": "error",
 
         "react-hooks/rules-of-hooks": "error",
         "react-hooks/exhaustive-deps": "off",
@@ -35,7 +34,7 @@ module.exports = {
         "@stylistic/comma-spacing": ["error", { "before": false, "after": true }],
         "@stylistic/dot-location": ["error", "property"],
         "@stylistic/type-annotation-spacing": "error",
-        "@stylistic/spaced-comment": ["error", "always"],
+        "@stylistic/spaced-comment": ["warn", "always"],
         "@stylistic/semi": ["error", "always"]
     }
-}
+};

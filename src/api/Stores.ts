@@ -5,7 +5,6 @@ import { ContextDependency } from "react-reconciler";
     if (!Object.keys(dep.memoizedValue).filter(a => a === prop).length > 0) return findStore(prop, dep.next);
     return dep;
 }*/
-
 const findStore = <T>(prop: string, dep: ContextDependency<T>): ContextDependency<T> | undefined => {
     if (!dep?.next) return;
     if (!(Object.keys(dep.memoizedValue).filter((a) => a === prop).length > 0)) return findStore<T>(prop, dep.next as ContextDependency<T>);
