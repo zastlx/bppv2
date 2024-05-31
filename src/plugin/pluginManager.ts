@@ -1,10 +1,7 @@
 import { iPluginManager } from "#types";
+import { Loggable } from "#utils/logger";
 import { bppPlugin } from "./plugins";
 import getPlugins from "~plugins";
-import logger from "#utils/logger";
-
-import { hard as hardPatcher } from "#patcher";
-import { Loggable } from "#utils/logger";
 
 class PluginManager extends Loggable implements iPluginManager {
     private plugins: bppPlugin[] = [];
@@ -26,15 +23,15 @@ class PluginManager extends Loggable implements iPluginManager {
     }
 
     enableAll(): void {
-        this.plugins.forEach(plugin => plugin.onEnable());
+        this.plugins.forEach((plugin) => plugin.onEnable());
     }
 
     disableAll(): void {
-        this.plugins.forEach(plugin => plugin.onDisable());
+        this.plugins.forEach((plugin) => plugin.onDisable());
     }
 
     getPlugin(name: string): bppPlugin {
-        return this.plugins.find(plugin => plugin.name === name);
+        return this.plugins.find((plugin) => plugin.name === name);
     }
 
     getPlugins(): bppPlugin[] {

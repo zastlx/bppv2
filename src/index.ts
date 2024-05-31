@@ -1,4 +1,4 @@
-import logger, { Loggable } from "#utils/logger";
+import logger from "#utils/logger";
 
 import PluginManager from "#plugin/pluginManager";
 import events from "#utils/eventManager";
@@ -29,7 +29,7 @@ window.BPP = {
 };
 console.log(window.BPP);
 
-pam.addPatches(pm.getPlugins().map(plugin => plugin.patches).flat());
+pam.addPatches(pm.getPlugins().map((plugin) => plugin.patches).flat());
 
 // Reload the patches
 pam.softReload(true);

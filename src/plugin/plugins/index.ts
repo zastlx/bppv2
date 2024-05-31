@@ -27,10 +27,10 @@ export abstract class bppPlugin extends Loggable implements iPlugin {
     }
 
     addPatches(patches: Omit<iPatch, "plugin">[]): void {
-        let _patches: iPatch[] = patches.map(patch => ({ ...patch, plugin: this.name }));
+        const _patches: iPatch[] = patches.map((patch) => ({ ...patch, plugin: this.name }));
         this.patches.push(..._patches);
     }
 
-    onEnable(): void { };
-    onDisable(): void { };
+    onEnable(): void { }
+    onDisable(): void { }
 }
