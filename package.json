@@ -2,8 +2,7 @@
   "name": "bppv2",
   "type": "module",
   "scripts": {
-    "build": "node scripts/build.mjs",
-    "build:ts": "bun scripts/build.ts"
+    "build": "bun scripts/build.ts"
   },
   "devDependencies": {
     "@types/bun": "latest"

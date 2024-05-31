@@ -5,6 +5,7 @@ import { Devs } from "#utils/consts";
 import { bppPlugin } from "..";
 import { BPPPage } from "./customPages";
 import * as SocketIOClient from "socket.io-client"
+import { pam } from "#index";
 
 // we really need to move most of this plugins functionality into bpp itself, i dont think its nice having one plugin for all off the internal patches and functionality, we need to refactor at some point
 
@@ -13,6 +14,22 @@ class InternalsPlugin extends bppPlugin {
         super("Internals", "0.0.1", "A plugin handling internal features of BPP", [Devs.zastix]);
 
         this.addPatches([
+            {
+                find: "__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED",
+                replacement: [
+                    {
+                        match: /from".\/index.(.{0,10}).js/,
+                        replace: `from"${location.origin}/index.$1.js`
+                    },
+                    // not needed bcuz by patching the vendor file i inedvertantly fixed the react-tooltip styles not being added back :/
+                    /*{
+                        match: /"react-tooltip-inject-styles",\((.{0,2})=>{(.{0,2})\.detail\.disableCore\|\|(.{0,4})\({css:"(.{0,})",type:"(.{0,4})"}\),(.{0,2}).detail.disableBase\|\|(.{0,4})\(\{css:"\\n(.{0,})",type:"(.{0,4})"\}\)\}\)/,
+                        replace: (match, ...groups) => {
+                            return `"react-tooltip-inject-styles", ($self.reinjectReactTooltip=(${groups[0]}=>{${groups[1]}.detail.disableCore||${groups[2]}({css:"${groups[3]}",type:"${groups[4]}"}),${groups[1]}.detail.disableBase||${groups[2]}({css:"\\n${groups[7]}",type:"${groups[82]}"})}))`;
+                        }
+                    }*/
+                ]
+            },
             {
                 // this was a string that im 99% sure wont match any file execpt index, if rewrite implments code splitting this will be updated
                 find: "iridescent",
@@ -26,8 +43,8 @@ class InternalsPlugin extends bppPlugin {
                     {
                         match: /import\{(.{0,})\}from"\.\/vendor\.(.{0,10})\.js\"/,
                         replace: (match, ...groups) => {
-                            // im sorry for anyone who has to read this
-                            return `$self.vendors={};$self.vendors._vendors=await import(\"${location.origin}/vendor.$2.js\");$self.handleVendors();const {${Object.entries([...groups[0].matchAll(/(.{0,1}) as (.{0,1})/g)].reduce((a, [, key, val]) => (a[key] = val, a), {})).reduce((c, d) => c + `${d[0]}:${d[1]},`, "").slice(0, -1)}}=BPP.pluginManager.getPlugin("Internals").vendors.vendors;$self.pages=$self.pages.map(a=>{a.component=a.component();return a;})`;
+                            // im sorry for anyone who has to read this                            
+                            return `$self.vendors={};$self.vendors._vendors=await import(\"${pam.files.find(file => file.path.match(/vendor/)).patchedPath}\");$self.handleVendors();const {${Object.entries([...groups[0].matchAll(/(.{0,1}) as (.{0,1})/g)].reduce((a, [, key, val]) => (a[key] = val, a), {})).reduce((c, d) => c + `${d[0]}:${d[1]},`, "").slice(0, -1)}}=BPP.pluginManager.getPlugin("Internals").vendors.vendors;$self.pages=$self.pages.map(a=>{a.component=a.component();return a;})`;
                         }
                     },
                     {
@@ -48,7 +65,6 @@ class InternalsPlugin extends bppPlugin {
         const checks = {
             React: "useState",
             ReactDOM: ".onRecoverableError",
-            Phaser: "Game",
             SocketIOClient: "io",
             //ReactHelmetProvider: "canUseDom",
             //ReactHelmet: "Helmet does not support rendering"
@@ -58,13 +74,11 @@ class InternalsPlugin extends bppPlugin {
         this.vendors.normalized = {
             React: Object.values(this.vendors.vendors).find(vendor => vendor[checks.React]) as (typeof React),
             ReactDOM: Object.values(this.vendors.vendors).find(vendor => vendor.toString().includes(checks.ReactDOM)) as (typeof ReactDOM),
-            Phaser: Object.values(this.vendors.vendors).find(vendor => vendor[checks.Phaser]) as (typeof Phaser),
             SocketIOClient: Object.values(this.vendors.vendors).find(vendor => vendor[checks.SocketIOClient]) as (typeof SocketIOClient),
         }
         this.vendors.map = {
             React: Object.keys(this.vendors.vendors).find(vendor => this.vendors.vendors[vendor] === this.vendors.normalized.React),
             ReactDOM: Object.keys(this.vendors.vendors).find(vendor => this.vendors.vendors[vendor] === this.vendors.normalized.ReactDOM),
-            Phaser: Object.keys(this.vendors.vendors).find(vendor => this.vendors.vendors[vendor] === this.vendors.normalized.Phaser),
             SocketIOClient: Object.keys(this.vendors.vendors).find(vendor => this.vendors.vendors[vendor] === this.vendors.normalized.SocketIOClient),
         }
 
@@ -74,20 +88,18 @@ class InternalsPlugin extends bppPlugin {
     blacketScope(txt: string): any { };
     pages = [BPPPage];
     vendors: {
-        vendors: { [key: string]: any },
-        _vendors: { [key: string]: any },
+        vendors: { [key: string]: any }
+        _vendors: { [key: string]: any }
         normalized: {
             React: typeof React,
             ReactDOM: typeof ReactDOM,
-            Phaser: typeof Phaser,
             SocketIOClient: typeof SocketIOClient
-        },
+        }
         map: {
             React: string,
             ReactDOM: string,
-            Phaser: string,
             SocketIOClient: string
-        },
+        }
     };
 };
 

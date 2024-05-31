@@ -34,4 +34,4 @@ pam.addPatches(pm.getPlugins().map(plugin => plugin.patches).flat());
 // Reload the patches
 pam.softReload(true);
 
-// react tooltip doesnt add back its styles after a soft-reload so we have to do that manually
+export { pam, pm };
