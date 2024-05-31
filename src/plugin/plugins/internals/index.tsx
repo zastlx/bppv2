@@ -2,7 +2,8 @@ import React from "react";
 import ReactDOM from "react-dom";
 
 import { Devs } from "#utils/consts";
-import { bppPlugin } from ".";
+import { bppPlugin } from "..";
+import { BPPPage } from "./customPages";
 import * as SocketIOClient from "socket.io-client"
 
 // we really need to move most of this plugins functionality into bpp itself, i dont think its nice having one plugin for all off the internal patches and functionality, we need to refactor at some point
@@ -26,14 +27,15 @@ class InternalsPlugin extends bppPlugin {
                         match: /import\{(.{0,})\}from"\.\/vendor\.(.{0,10})\.js\"/,
                         replace: (match, ...groups) => {
                             // im sorry for anyone who has to read this
-                            return `$self.vendors={};$self.vendors._vendors=await import(\"${location.origin}/vendor.$2.js\");$self.handleVendors();const {${Object.entries([...groups[0].matchAll(/(.{0,1}) as (.{0,1})/g)].reduce((a, [, key, val]) => (a[key] = val, a), {})).reduce((c, d) => c + `${d[0]}:${d[1]},`, "").slice(0, -1)}}=BPP.pluginManager.getPlugin("Internals").vendors.vendors;`;
+                            return `$self.vendors={};$self.vendors._vendors=await import(\"${location.origin}/vendor.$2.js\");$self.handleVendors();const {${Object.entries([...groups[0].matchAll(/(.{0,1}) as (.{0,1})/g)].reduce((a, [, key, val]) => (a[key] = val, a), {})).reduce((c, d) => c + `${d[0]}:${d[1]},`, "").slice(0, -1)}}=BPP.pluginManager.getPlugin("Internals").vendors.vendors;$self.pages=$self.pages.map(a=>{a.component=a.component();return a;})`;
                         }
                     },
                     {
                         match: /AuctionHouse:(.{0,3}),/,
-                        replace: "AuctionHouse:$1,"
+                        replace: (match, ...groups) => {
+                            return `AuctionHouse:${groups[0]},${this.pages.map((page, i) => `${page.name}:$self.pages[${i}]`).join(",")},`;
+                        }
                     },
-                    // replace the store link with the BPP link
                     {
                         match: /{to:"\/store",icon:"fas fa-cart-shopping",className:(.{0,3}),backgroundColor:"#2b22c2",children:"Visit Store"}/,
                         replace: "{to:\"/bpp\",icon:\"fas fa-plus\",className:$1,backgroundColor:\"#ff00d8\",children:\"BPP\"}"
@@ -69,7 +71,8 @@ class InternalsPlugin extends bppPlugin {
         // softpatching vendors can occur here
 
     }
-    blacketScope(txt: string): any { }
+    blacketScope(txt: string): any { };
+    pages = [BPPPage];
     vendors: {
         vendors: { [key: string]: any },
         _vendors: { [key: string]: any },
