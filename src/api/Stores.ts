@@ -14,4 +14,3 @@ const findStore = <T>(prop: string, dep: ContextDependency<T>): ContextDependenc
 }
 
 const modalStore = findStore<ModalStoreContext>("createModal", Object.entries(document.querySelector(`div[class*="Body"]>div`)).find(a => a[0].includes("Fiber"))[1].return.dependencies);
-console

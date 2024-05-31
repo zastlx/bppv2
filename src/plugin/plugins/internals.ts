@@ -13,7 +13,7 @@ class InternalsPlugin extends bppPlugin {
 
         this.addPatches([
             {
-                // this was a string that im 99% sure wont match any file execpt index, if v2 implments code splitting this will be updated
+                // this was a string that im 99% sure wont match any file execpt index, if rewrite implments code splitting this will be updated
                 find: "iridescent",
                 replacement: [
                     // i have no idea why it trys to import itself??
@@ -28,6 +28,10 @@ class InternalsPlugin extends bppPlugin {
                             // im sorry for anyone who has to read this
                             return `$self.vendors={};$self.vendors._vendors=await import(\"${location.origin}/vendor.$2.js\");$self.handleVendors();const {${Object.entries([...groups[0].matchAll(/(.{0,1}) as (.{0,1})/g)].reduce((a, [, key, val]) => (a[key] = val, a), {})).reduce((c, d) => c + `${d[0]}:${d[1]},`, "").slice(0, -1)}}=BPP.pluginManager.getPlugin("Internals").vendors.vendors;`;
                         }
+                    },
+                    {
+                        match: /AuctionHouse:(.{0,3}),/,
+                        replace: "AuctionHouse:$1,"
                     },
                     // replace the store link with the BPP link
                     {
