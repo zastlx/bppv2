@@ -8,7 +8,8 @@
   "devDependencies": {
     "@stylistic/eslint-plugin": "1.7.0",
     "@types/bun": "latest",
-    "eslint-plugin-react-hooks": "4.6.0"
+    "eslint-plugin-react-hooks": "4.6.0",
+    "typescript-plugin-css-modules": "^5.1.0"
   },
   "peerDependencies": {
     "typescript": "^5.4.5"
@@ -19,6 +20,7 @@
     "@types/react-reconciler": "^0.28.8",
     "@types/socket.io-client": "^3.0.0",
     "eslint": "8.57.0",
+    "postcss-modules": "^6.0.0",
     "spitroast": "^1.4.4"
   }
 }

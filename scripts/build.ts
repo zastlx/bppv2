@@ -1,5 +1,6 @@
 import { OnResolveArgs, Plugin, PluginBuild, build } from "esbuild";
-import { readdir, readFile, writeFile } from "fs/promises";
+// import sassPlugin from "esbuild-sass-plugin";
+import { readdir, readFile, writeFile, rm } from "fs/promises";
 
 const userScriptBanner = await readFile("./scripts/banner.txt");
 
@@ -43,6 +44,7 @@ await build({
     outfile: "dist/bpp.full.js"
 });
 
+
 await build({
     entryPoints: ["src/index.ts"],
     bundle: true,
@@ -57,6 +59,22 @@ await build({
     outfile: "dist/bpp.min.js"
 });
 
-const userScriptCode = `${userScriptBanner}\n${await readFile("dist/bpp.min.js")}`;
+// embedding css into the script bcuz esbuild has no support for that :/
+let min = (await readFile("dist/bpp.min.js", "utf-8")).trim();
+let full = (await readFile("dist/bpp.full.js", "utf-8")).trim();
+const cssMin = (await readFile("dist/bpp.min.css", "utf-8")).trim().split("\n");
+const cssFull = (await readFile("dist/bpp.full.css", "utf-8")).trim();
+cssMin.pop();
+min = min.replace("CSS_HERE", cssMin.join("\n"));
+full = full.replace("\"CSS_HERE\"", `\`${cssFull}\``);
 
+await writeFile("dist/bpp.min.js", min);
+await writeFile("dist/bpp.full.js", full);
+
+await rm("dist/bpp.min.css");
+await rm("dist/bpp.min.css.map");
+await rm("dist/bpp.full.css");
+
+// userscript creation
+const userScriptCode = `${userScriptBanner}\n${await readFile("dist/bpp.min.js")}`;
 await writeFile("dist/bpp.user.js", userScriptCode.replaceAll("//# sourceMappingURL=bpp.js.map", ""));

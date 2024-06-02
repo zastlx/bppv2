@@ -65,7 +65,7 @@ class PatchManager extends Loggable {
                     else file.patched = file.patched.replace(patch.replacement.match, patch.replacement.replace).replaceAll("$self", `window.BPP.pluginManager.getPlugin("${patch.plugin}")`);
                 }
             }
-            file.patchedPath = URL.createObjectURL(new Blob([file.patched], { type: "application/javascript" }));
+            file.patchedPath = URL.createObjectURL(new Blob([`// ${file.path.replace(`${location.origin}/`, "")} ${file.patchedBy.length > 0 ? `- Patched By ${file.patchedBy.join(", ")}` : ""}\n`, file.patched], { type: "application/javascript" }));
         }
     }
 
@@ -102,6 +102,9 @@ class PatchManager extends Loggable {
         });
         document.write(dom.documentElement.innerHTML);
         document.close();
+        const style = document.createElement("style");
+        style.innerHTML = "CSS_HERE";
+        document.head.append(style);
         for (const x of scripts) {
             const script = x as HTMLScriptElement;
             if (script.nodeType !== 1) continue;

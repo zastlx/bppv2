@@ -15,6 +15,13 @@ class InternalsPlugin extends bppPlugin {
 
         this.addPatches([
             {
+                find: "textures.getFrame(\"__DEFAULT\").glTexture",
+                replacement: [{
+                    match: /\.Phaser=(.{0,2})\(\)}\(this,/,
+                    replace: ".Phaser=$1()}(window,"
+                }]
+            },
+            {
                 find: "__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED",
                 replacement: [
                     {
@@ -56,6 +63,10 @@ class InternalsPlugin extends bppPlugin {
                     {
                         match: /{to:"\/store",icon:"fas fa-cart-shopping",className:(.{0,3}),backgroundColor:"#2b22c2",children:"Visit Store"}/,
                         replace: "{to:\"/bpp\",icon:\"fas fa-plus\",className:$1,backgroundColor:\"#ff00d8\",children:\"BPP\"}"
+                    },
+                    {
+                        match: /path:"\/dashboard"/,
+                        replace: "path:\"/dashboard\",topRight:[]"
                     }
                 ]
             }
