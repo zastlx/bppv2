@@ -24,7 +24,9 @@ declare global {
     interface Window {
         BPP: BppGlobal
     }
+    const isDev: boolean;
 }
+// esbuild defines
 
 export {
     iDev,

@@ -1,9 +1,13 @@
+import { pm } from "#index";
+import { InternalsPlugin } from "#plugin/plugins/internals";
 import * as styles from "./index.module.css";
 
 export default () => {
     return (
-        <div>
-            <h1 className={styles.mainText}>My Main Page</h1>
-        </div>
+        <>
+            <div className={(pm.getPlugin("Internals") as InternalsPlugin).blacketScope("fn").wrapper}>
+                <h1 className={styles.mainText}>rizz</h1>
+            </div>
+        </>
     );
 };

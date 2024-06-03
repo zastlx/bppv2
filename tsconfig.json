@@ -15,6 +15,7 @@
     "noEmit": true,
     "jsx": "react",
     "jsxFactory": "window.BPP.pluginManager.pluginList.Internals.vendors.normalized.React.createElement",
+    "jsxFragmentFactory": "window.BPP.pluginManager.pluginList.Internals.vendors.normalized.React.Fragment",
     "baseUrl": "./src/",
     "paths": {
         "#*": ["./*"]

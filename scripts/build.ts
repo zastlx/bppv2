@@ -4,6 +4,10 @@ import { readdir, readFile, writeFile, rm } from "fs/promises";
 
 const userScriptBanner = await readFile("./scripts/banner.txt");
 
+const defines = {
+    isDev: `${process.argv.includes("--dev")}`
+};
+
 const getAllPluginsPlugin: Plugin = {
     name: "getAllPlugins",
     setup: (build: PluginBuild) => {
@@ -40,6 +44,7 @@ await build({
     footer: {
         js: "//made with ❤️ by zastix and allie, https://github.com/zastlx/bppv2"
     },
+    define: defines,
     sourcemap: false,
     outfile: "dist/bpp.full.js"
 });
@@ -52,9 +57,11 @@ await build({
     target: ["esnext"],
     plugins: [getAllPluginsPlugin],
     minify: true,
+    legalComments: "none",
     footer: {
         js: "// made with ❤️ by zastix and allie, https://github.com/zastlx/bppv2"
     },
+    define: defines,
     sourcemap: true,
     outfile: "dist/bpp.min.js"
 });

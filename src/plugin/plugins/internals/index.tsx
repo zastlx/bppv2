@@ -116,3 +116,4 @@ class InternalsPlugin extends bppPlugin {
 }
 
 export default new InternalsPlugin();
+export { InternalsPlugin };

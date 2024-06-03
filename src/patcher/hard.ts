@@ -103,6 +103,7 @@ class PatchManager extends Loggable {
         document.write(dom.documentElement.innerHTML);
         document.close();
         const style = document.createElement("style");
+        // css is added on compile-time via build script
         style.innerHTML = "CSS_HERE";
         document.head.append(style);
         for (const x of scripts) {
