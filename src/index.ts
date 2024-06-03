@@ -35,9 +35,12 @@ pam.softReload(true);
 
 (async () => {
     if (isDev) {
+        console.log("Dev mode enabled, connecting to dev hot-reload server...");
         // @ts-expect-error external module
         const ReconnectingWebSocket = (await import("https://cdn.jsdelivr.net/npm/reconnecting-websocket/+esm")).default;
-        const devWS = new ReconnectingWebSocket("ws://localhost:3000/ws");
+        const devWS = new ReconnectingWebSocket("ws://localhost:3000/ws", [], {
+            maxRetries: 10
+        });
         devWS.onopen = () => devWS.send(JSON.stringify({
             type: "register"
         }));
@@ -46,6 +49,7 @@ pam.softReload(true);
             const data = JSON.parse(msg.data);
             switch (data.type) {
                 case "reload":
+                    delete window.BPP;
                     eval(await (await fetch("http://localhost:3000/bpp.min.js")).text());
                     break;
             }

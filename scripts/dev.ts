@@ -44,6 +44,12 @@ app.listen(3000, () => {
     console.log("Server started on port 3000");
 });
 
+await spawnSync({
+    cmd: ["bun", "run", "build:dev"],
+    stdout: "pipe",
+    stderr: "pipe"
+});
+
 const watcher = watch("src", { recursive: true });
 for await (const _ of watcher) {
     // stfu typescript

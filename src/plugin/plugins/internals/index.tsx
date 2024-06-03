@@ -1,11 +1,14 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
+import { ConfigStoreContext, ChatStoreContext, FontStoreContext, PackStoreContext, ModalStoreContext, SocketStoreContext, LoadingStoreContext, CachedUserStoreContext, LeaderboardStoreContext, ContextMenuContext } from "#types/blacket/stores";
 import { Devs } from "#utils/consts";
 import { bppPlugin } from "..";
 import { BPPPage } from "./customPages";
 import * as SocketIOClient from "socket.io-client";
 import { pam } from "#index";
+import { after } from "spitroast";
+import { ContextDependency } from "react-reconciler";
 
 // we really need to move most of this plugins functionality into bpp itself, i dont think its nice having one plugin for all off the internal patches and functionality, we need to refactor at some point
 
@@ -94,8 +97,66 @@ class InternalsPlugin extends bppPlugin {
         };
 
         // softpatching vendors can occur here
+        const storeChecks = {
+            modal: "setModals",
+            user: "setUser",
+            socket: "initializeSocket",
+            fonts: "setFonts",
+            config: "setConfig",
+            loading: "setLoading",
+            leaderboard: "setLeaderboard",
+            blooks: "setBlooks",
+            rarities: "setRarities",
+            packs: "setPacks",
+            items: "setItems",
+            banners: "setBanners",
+            badges: "setBadges",
+            emojis: "setEmojis",
+            cachedUsers: "addCachedUser",
+            chat: "usersTyping",
+            contextManu: "closeContextMenu"
+        };
+
+        after("createContext", this.vendors.normalized.React, (args, ret) => {
+            const store = Object.entries(storeChecks).find((a) => args[0]?.[a[1]])?.[0];
+            if (!store) return;
+
+            this.storeProviders[store] = ret;
+        });
+
+        after("useContext", this.vendors.normalized.React, (args, ret) => {
+            const store = Object.entries(storeChecks).find((a) => ret?.[a[1]])?.[0];
+            if (!store) return;
+
+            this.stores[store] = ret;
+        });
 
     }
+    stores: Partial<{
+        config: ContextDependency<ConfigStoreContext>,
+        loading: ContextDependency<LoadingStoreContext>,
+        modals: ContextDependency<ModalStoreContext>,
+        socket: ContextDependency<SocketStoreContext>,
+        cachedUsers: ContextDependency<CachedUserStoreContext>,
+        leaderboard: ContextDependency<LeaderboardStoreContext>,
+        packs: ContextDependency<PackStoreContext>,
+        chat: ContextDependency<ChatStoreContext>,
+        fonts: ContextDependency<FontStoreContext>,
+        contextMenu: ContextDependency<ContextMenuContext>
+    }> = {};
+    storeProviders: Partial<{
+        config: ConfigStoreContext,
+        loading: LoadingStoreContext,
+        modals: ModalStoreContext,
+        socket: SocketStoreContext,
+        cachedUsers: CachedUserStoreContext,
+        leaderboard: LeaderboardStoreContext,
+        packs: PackStoreContext,
+        chat: ChatStoreContext,
+        fonts: FontStoreContext
+        contextMenu: ContextMenuContext,
+    }> = {};
+
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     blacketScope(txt: string): any { }
     pages = [BPPPage];

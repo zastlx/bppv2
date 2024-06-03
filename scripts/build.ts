@@ -1,6 +1,6 @@
 import { OnResolveArgs, Plugin, PluginBuild, build } from "esbuild";
 // import sassPlugin from "esbuild-sass-plugin";
-import { readdir, readFile, writeFile, rm } from "fs/promises";
+import { readdir, readFile, writeFile, rm, exists } from "fs/promises";
 
 const userScriptBanner = await readFile("./scripts/banner.txt");
 
@@ -78,9 +78,11 @@ full = full.replace("\"CSS_HERE\"", `\`${cssFull}\``);
 await writeFile("dist/bpp.min.js", min);
 await writeFile("dist/bpp.full.js", full);
 
-await rm("dist/bpp.min.css");
-await rm("dist/bpp.min.css.map");
-await rm("dist/bpp.full.css");
+const rmIfExist = async (path: string) => await exists(path) && await rm(path);
+
+await rmIfExist("dist/bpp.min.css");
+await rmIfExist("dist/bpp.min.css.map");
+await rmIfExist("dist/bpp.full.css");
 
 // userscript creation
 const userScriptCode = `${userScriptBanner}\n${await readFile("dist/bpp.min.js")}`;

@@ -1,0 +1,33 @@
+export interface DashboardStyles {
+    parentHolder: string
+    section: string
+    userTopProfile: string
+    userBannerBlook: string
+    bannerLevel: string
+    levelBarContainer: string
+    levelBar: string
+    levelStarContainer: string
+    userBanner: string
+    userBadges: string
+    topRightButton: string
+    smallButtonContainer: string
+    smallButton: string
+    containerHeader: string
+    containerHeaderInside: string
+    statsContainer: string
+    statsContainerHolder: string
+    statContainer: string
+    statHeader: string
+    statDivider: string
+    statValue: string
+    friendsContainer: string
+    friendsTop: string
+    holdFriends: string
+    auctionContainer: string
+    auctionStats: string
+    auctionStatMod: string
+    profit: string
+    loss: string
+    yourLiveAuctions: string
+    auction: string
+}

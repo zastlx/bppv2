@@ -24,9 +24,19 @@ declare global {
     interface Window {
         BPP: BppGlobal
     }
+
+    // esbuild defines
     const isDev: boolean;
 }
-// esbuild defines
+
+export interface LinkProps {
+    children?: React.ReactNode;
+    relative?: "route" | "path";
+    replace?: boolean;
+    state?: any;
+    to: string;
+    className?: string;
+}
 
 export {
     iDev,

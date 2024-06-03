@@ -8,7 +8,7 @@ const BPPPage: Partial<BlacketRoute> = {
     topRight: [TopRightContent.TOKENS],
     sidebar: true,
     background: true,
-    dontUseBody: true,
+    dontUseBody: false,
     component: () => <Main />
 };
 
