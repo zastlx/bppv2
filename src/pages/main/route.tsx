@@ -1,5 +1,5 @@
-import Main from "#pages/main";
-import { BlacketRoute, TopRightContent } from "#types/blacket/pages.d";
+import { BlacketRoute, TopRightContent } from "#types/blacket/pages";
+import Main from ".";
 
 const BPPPage: Partial<BlacketRoute> = {
     name: "BPP",

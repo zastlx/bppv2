@@ -14,4 +14,4 @@ interface iPatch {
     replacement: iPatchReplacement | iPatchReplacement[];
 }
 
-export { iPatch };
+export { iPatch, iPatchReplacement };

@@ -31,3 +31,79 @@ export interface DashboardStyles {
     yourLiveAuctions: string
     auction: string
 }
+
+export interface LeaderboardStyles {
+    wrapper: string
+    filterButton: string
+    mobileFilterButton: string
+    placementOne: string
+    placementTwo: string
+    placementThree: string
+    placementInside: string
+    placeText: string
+    placeSuffix: string
+    usernameOne: string
+    scoreOne: string
+    placeOne: string
+    avatarOne: string
+    usernameTwo: string
+    scoreTwo: string
+    placeTwo: string
+    avatarTwo: string
+    usernameThree: string
+    scoreThree: string
+    placeThree: string
+    avatarThree: string
+    otherStandings: string
+    otherTopThreeStandings: string
+    otherStandingHolder: string
+    otherStandingContainer: string
+    otherStandingBottomScores: string
+    otherStandingInside: string
+    otherStandingBottomScore: string
+    otherStandingBottomButton: string
+    otherStandingPlace: string
+    otherStandingSuffix: string
+    otherStandingAvatar: string
+    otherStandingUsername: string
+    otherStandingScore: string
+};
+
+export interface ChatStyles {
+    container: string
+    messagesContainer: string
+    messageHolder: string
+    replyIcon: string
+    swipeTop: string
+    message: string
+    messageSmallTimestamp: string
+    highlightedMessage: string
+    highlight: string
+    avatar: string
+    messageAvatarContainer: string
+    usernameContainer: string
+    messageContainer: string
+    messageContentContainer: string
+    messageAvatar: string
+    messageUsername: string
+    messageBigTimestamp: string
+    messageBadgeContainer: string
+    messageBadge: string
+    messageContent: string
+    messageForm: string
+    messageInputContainer: string
+    messageInput: string
+    messageInputPlaceholder: string
+    usersTypingContainer: string
+    aboveInputContainer: string
+    messageSend: string
+    replyingTo: string
+    replyingToUsername: string
+    replyingToMessage: string
+    mention: string
+    emoji: string
+    mentionList: string
+    usersInMentionList: string
+    mentionUser: string
+    userMentionContainer: string
+};

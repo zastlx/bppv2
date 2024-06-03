@@ -1,14 +1,14 @@
-import React from "react";
+import React, { Context } from "react";
 import ReactDOM from "react-dom";
+import { CompHook, handleVendors } from "./vendors";
 
 import { ConfigStoreContext, ChatStoreContext, FontStoreContext, PackStoreContext, ModalStoreContext, SocketStoreContext, LoadingStoreContext, CachedUserStoreContext, LeaderboardStoreContext, ContextMenuContext } from "#types/blacket/stores";
 import { Devs } from "#utils/consts";
 import { bppPlugin } from "..";
-import { BPPPage } from "./customPages";
+import { BPPPage } from "#pages/main/route";
 import * as SocketIOClient from "socket.io-client";
 import { pam } from "#index";
-import { after } from "spitroast";
-import { ContextDependency } from "react-reconciler";
+import { ChatStyles, DashboardStyles, LeaderboardStyles } from "#types/blacket/styles";
 
 // we really need to move most of this plugins functionality into bpp itself, i dont think its nice having one plugin for all off the internal patches and functionality, we need to refactor at some point
 
@@ -31,13 +31,6 @@ class InternalsPlugin extends bppPlugin {
                         match: /from".\/index.(.{0,10}).js/,
                         replace: `from"${location.origin}/index.$1.js`
                     }
-                    // not needed bcuz by patching the vendor file i inedvertantly fixed the react-tooltip styles not being added back :/
-                    /* {
-                        match: /"react-tooltip-inject-styles",\((.{0,2})=>{(.{0,2})\.detail\.disableCore\|\|(.{0,4})\({css:"(.{0,})",type:"(.{0,4})"}\),(.{0,2}).detail.disableBase\|\|(.{0,4})\(\{css:"\\n(.{0,})",type:"(.{0,4})"\}\)\}\)/,
-                        replace: (match, ...groups) => {
-                            return `"react-tooltip-inject-styles", ($self.reinjectReactTooltip=(${groups[0]}=>{${groups[1]}.detail.disableCore||${groups[2]}({css:"${groups[3]}",type:"${groups[4]}"}),${groups[1]}.detail.disableBase||${groups[2]}({css:"\\n${groups[7]}",type:"${groups[82]}"})}))`;
-                        }
-                    }*/
                 ]
             },
             {
@@ -54,12 +47,12 @@ class InternalsPlugin extends bppPlugin {
                         match: /import\{(.{0,})\}from"\.\/vendor\.(.{0,10})\.js"/,
                         replace: (match, ...groups) => {
                             // im sorry for anyone who has to read this                            
-                            return `$self.vendors={};$self.vendors._vendors=await import("${pam.files.find((file) => file.path.match(/vendor/)).patchedPath}");$self.handleVendors();const {${Object.entries([...groups[0].matchAll(/(.{0,1}) as (.{0,1})/g)].reduce((a, [, key, val]) => (a[key] = val, a), {})).reduce((c, d) => c + `${d[0]}:${d[1]},`, "").slice(0, -1)}}=BPP.pluginManager.getPlugin("Internals").vendors.vendors;$self.pages=$self.pages.map(a=>{a.component=a.component();return a;})`;
+                            return `$self.vendors={};$self.vendors._vendors=await import("${pam.files.find((file) => file.path.match(/vendor/)).patchedPath}");$self.handleVendors($self);const {${Object.entries([...groups[0].matchAll(/(.{0,1}) as (.{0,1})/g)].reduce((a, [, key, val]) => (a[key] = val, a), {})).reduce((c, d) => c + `${d[0]}:${d[1]},`, "").slice(0, -1)}}=BPP.pluginManager.getPlugin("Internals").vendors.vendors;$self.pages=$self.pages.map(a=>{a.component=a.component();return a;})`;
                         }
                     },
                     {
                         match: /AuctionHouse:(.{0,3}),/,
-                        replace: (match, ...groups) => {
+                        replace: (_match, ...groups) => {
                             return `AuctionHouse:${groups[0]},${this.pages.map((page, i) => `${page.name}:$self.pages[${i}]`).join(",")},`;
                         }
                     },
@@ -68,93 +61,54 @@ class InternalsPlugin extends bppPlugin {
                         replace: "{to:\"/bpp\",icon:\"fas fa-plus\",className:$1,backgroundColor:\"#ff00d8\",children:\"BPP\"}"
                     },
                     {
-                        match: /path:"\/dashboard"/,
-                        replace: "path:\"/dashboard\",topRight:[]"
+                        match: /t:(.{0,2})\.jsx\((.{0,2}),{children:(.{0,2})\.jsx\((.{0,2}),/,
+                        replace: "t:$1.jsx($2,{children:$3.jsx($self.componentHook($4,$self),"
                     }
+
                 ]
             }
         ]);
     }
-    handleVendors() {
-        const checks = {
-            React: "useState",
-            ReactDOM: ".onRecoverableError",
-            SocketIOClient: "io"
-            // ReactHelmetProvider: "canUseDom",
-            // ReactHelmet: "Helmet does not support rendering"
-        };
-
-        this.vendors.vendors = Object.fromEntries(Object.entries(this.vendors._vendors));
-        this.vendors.normalized = {
-            React: Object.values(this.vendors.vendors).find((vendor) => vendor[checks.React]) as (typeof React),
-            ReactDOM: Object.values(this.vendors.vendors).find((vendor) => vendor.toString().includes(checks.ReactDOM)) as (typeof ReactDOM),
-            SocketIOClient: Object.values(this.vendors.vendors).find((vendor) => vendor[checks.SocketIOClient]) as (typeof SocketIOClient)
-        };
-        this.vendors.map = {
-            React: Object.keys(this.vendors.vendors).find((vendor) => this.vendors.vendors[vendor] === this.vendors.normalized.React),
-            ReactDOM: Object.keys(this.vendors.vendors).find((vendor) => this.vendors.vendors[vendor] === this.vendors.normalized.ReactDOM),
-            SocketIOClient: Object.keys(this.vendors.vendors).find((vendor) => this.vendors.vendors[vendor] === this.vendors.normalized.SocketIOClient)
-        };
-
-        // softpatching vendors can occur here
-        const storeChecks = {
-            modal: "setModals",
-            user: "setUser",
-            socket: "initializeSocket",
-            fonts: "setFonts",
-            config: "setConfig",
-            loading: "setLoading",
-            leaderboard: "setLeaderboard",
-            blooks: "setBlooks",
-            rarities: "setRarities",
-            packs: "setPacks",
-            items: "setItems",
-            banners: "setBanners",
-            badges: "setBadges",
-            emojis: "setEmojis",
-            cachedUsers: "addCachedUser",
-            chat: "usersTyping",
-            contextManu: "closeContextMenu"
-        };
-
-        after("createContext", this.vendors.normalized.React, (args, ret) => {
-            const store = Object.entries(storeChecks).find((a) => args[0]?.[a[1]])?.[0];
-            if (!store) return;
-
-            this.storeProviders[store] = ret;
-        });
-
-        after("useContext", this.vendors.normalized.React, (args, ret) => {
-            const store = Object.entries(storeChecks).find((a) => ret?.[a[1]])?.[0];
-            if (!store) return;
-
-            this.stores[store] = ret;
-        });
-
-    }
+    handleVendors = handleVendors;
+    componentHook = CompHook;
+    // alot of these stores are not typed bcuz i pulled them directly from blacket github repo and they are not typed there (thanks xotic)
     stores: Partial<{
-        config: ContextDependency<ConfigStoreContext>,
-        loading: ContextDependency<LoadingStoreContext>,
-        modals: ContextDependency<ModalStoreContext>,
-        socket: ContextDependency<SocketStoreContext>,
-        cachedUsers: ContextDependency<CachedUserStoreContext>,
-        leaderboard: ContextDependency<LeaderboardStoreContext>,
-        packs: ContextDependency<PackStoreContext>,
-        chat: ContextDependency<ChatStoreContext>,
-        fonts: ContextDependency<FontStoreContext>,
-        contextMenu: ContextDependency<ContextMenuContext>
+        modal: Context<ModalStoreContext>,
+        user: Context<any>,
+        socket: Context<SocketStoreContext>,
+        fonts: Context<FontStoreContext>,
+        config: Context<ConfigStoreContext>,
+        loading: Context<LoadingStoreContext>,
+        leaderboard: Context<LeaderboardStoreContext>,
+        blooks: Context<any>,
+        rarities: Context<any>,
+        packs: Context<PackStoreContext>,
+        items: Context<any>,
+        banners: Context<any>,
+        badges: Context<any>,
+        emojis: Context<any>,
+        cachedUsers: Context<CachedUserStoreContext>,
+        chat: Context<ChatStoreContext>,
+        contextManu: Context<ContextMenuContext>
     }> = {};
     storeProviders: Partial<{
-        config: ConfigStoreContext,
-        loading: LoadingStoreContext,
-        modals: ModalStoreContext,
-        socket: SocketStoreContext,
-        cachedUsers: CachedUserStoreContext,
-        leaderboard: LeaderboardStoreContext,
-        packs: PackStoreContext,
-        chat: ChatStoreContext,
-        fonts: FontStoreContext
-        contextMenu: ContextMenuContext,
+        modal: Context<ModalStoreContext>,
+        user: Context<any>,
+        socket: Context<SocketStoreContext>,
+        fonts: Context<FontStoreContext>,
+        config: Context<ConfigStoreContext>,
+        loading: Context<LoadingStoreContext>,
+        leaderboard: Context<LeaderboardStoreContext>,
+        blooks: Context<any>,
+        rarities: Context<any>,
+        packs: Context<PackStoreContext>,
+        items: Context<any>,
+        banners: Context<any>,
+        badges: Context<any>,
+        emojis: Context<any>,
+        cachedUsers: Context<CachedUserStoreContext>,
+        chat: Context<ChatStoreContext>,
+        contextManu: Context<ContextMenuContext>
     }> = {};
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -173,6 +127,11 @@ class InternalsPlugin extends bppPlugin {
             ReactDOM: string,
             SocketIOClient: string
         }
+    };
+    styles: {
+        dashboard: DashboardStyles,
+        leaderboard: LeaderboardStyles,
+        chat: ChatStyles
     };
 }
 
