@@ -1,6 +1,9 @@
+import chalk from "chalk";
 import { OnResolveArgs, Plugin, PluginBuild, build } from "esbuild";
 // import sassPlugin from "esbuild-sass-plugin";
 import { readdir, readFile, writeFile, rm, exists } from "fs/promises";
+
+const time = Date.now();
 
 const userScriptBanner = await readFile("./scripts/banner.txt");
 
@@ -87,3 +90,16 @@ await rmIfExist("dist/bpp.full.css");
 // userscript creation
 const userScriptCode = `${userScriptBanner}\n${await readFile("dist/bpp.min.js")}`;
 await writeFile("dist/bpp.user.js", userScriptCode.replaceAll("//# sourceMappingURL=bpp.js.map", ""));
+
+// get size of files in kb
+const minSize = (await readFile("dist/bpp.min.js")).length / 1024;
+const fullSize = (await readFile("dist/bpp.full.js")).length / 1024;
+const userScriptSize = (await readFile("dist/bpp.user.js")).length / 1024;
+
+
+console.log(`
+- ⚡ Built in ${chalk.redBright((Date.now() - time) / 1000)}s
+    ${chalk.magenta("dist/")}bpp.min.js    ${chalk.redBright(minSize.toFixed(2))}kb
+    ${chalk.magenta("dist/")}bpp.full.js   ${chalk.redBright(fullSize.toFixed(2))}kb
+    ${chalk.magenta("dist/")}bpp.user.js   ${chalk.redBright(userScriptSize.toFixed(2))}kb
+`)

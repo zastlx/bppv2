@@ -50,7 +50,8 @@ pam.softReload(true);
             switch (data.type) {
                 case "reload":
                     delete window.BPP;
-                    eval(await (await fetch("http://localhost:3000/bpp.min.js")).text());
+                    // avoid direct-eval to make esbuild shut up
+                    (0, eval)(await (await fetch("http://localhost:3000/bpp.min.js")).text());
                     break;
             }
         };
