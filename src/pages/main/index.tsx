@@ -7,9 +7,9 @@ import * as styles from "./index.module.css";
 
 export default () => {
     const { blacketScope } = (pm.getPlugin("Internals") as InternalsPlugin);
-    const PageHeader = blacketScope("je") as React.FC<{ children: React.ReactNode }>;
+    const PageHeader = blacketScope("be") as React.FC<{ children: React.ReactNode }>;
     const Link = blacketScope("t") as React.FC<LinkProps>;
-    const dashboardStyles = blacketScope("_n") as DashboardStyles;
+    const dashboardStyles = (pm.getPlugin("Internals") as InternalsPlugin).styles.dashboard as DashboardStyles;
 
     const btns = [
         {
@@ -28,6 +28,7 @@ export default () => {
             link: "/bpp/credits"
         }
     ];
+
     return (
         <>
             <PageHeader>Blacket++</PageHeader>

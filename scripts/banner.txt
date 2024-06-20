@@ -9,7 +9,7 @@
 
 // @match        *://rewrite.blacket.org/*
 // @match        *://159.65.251.176:3000/*
-// @match        *://localhost:3000/*
+// @match        *://localhost:6900/*
 
 // @grant        none
 // @run-at document-end

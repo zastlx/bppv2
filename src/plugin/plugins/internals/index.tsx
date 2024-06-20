@@ -9,6 +9,7 @@ import { BPPPage } from "#pages/main/route";
 import * as SocketIOClient from "socket.io-client";
 import { pam } from "#index";
 import { ChatStyles, DashboardStyles, LeaderboardStyles } from "#types/blacket/styles";
+import { stylePatches } from "./stylePatches";
 
 // we really need to move most of this plugins functionality into bpp itself, i dont think its nice having one plugin for all off the internal patches and functionality, we need to refactor at some point
 
@@ -37,17 +38,15 @@ class InternalsPlugin extends bppPlugin {
                 // this was a string that im 99% sure wont match any file execpt index, if rewrite implments code splitting this will be updated
                 find: "iridescent",
                 replacement: [
-                    // i have no idea why it trys to import itself??
                     {
                         match: /import"\.\/index\.(.{0,})\.js";/,
-                        // (this has nothing to do with it importing itself, its just convient to declare the blacketScope func here)
                         replace: "$self.blacketScope=(a)=>eval(a);"
                     },
                     {
                         match: /import\{(.{0,})\}from"\.\/vendor\.(.{0,10})\.js"/,
                         replace: (match, ...groups) => {
                             // im sorry for anyone who has to read this                            
-                            return `$self.vendors={};$self.vendors._vendors=await import("${pam.files.find((file) => file.path.match(/vendor/)).patchedPath}");$self.handleVendors($self);const {${Object.entries([...groups[0].matchAll(/(.{0,1}) as (.{0,1})/g)].reduce((a, [, key, val]) => (a[key] = val, a), {})).reduce((c, d) => c + `${d[0]}:${d[1]},`, "").slice(0, -1)}}=BPP.pluginManager.getPlugin("Internals").vendors.vendors;$self.pages=$self.pages.map(a=>{a.component=a.component();return a;})`;
+                            return `$self.vendors={};$self.vendors._vendors=await import("${pam.files.find((file) => file.path.match(/vendor/)).patchedPath}");$self.handleVendors($self);const {${Object.entries([...groups[0].matchAll(/(.{0,1}) as (.{0,1})/g)].reduce((a, [, key, val]) => (a[key] = val, a), {})).reduce((c, d) => c + `${d[0]}:${d[1]},`, "").slice(0, -1)}}=BPP.pluginManager.getPlugin("Internals").vendors.vendors;$self.pages=$self.pages.map(a=>{a.component=a.component();return a;});$self.styles={};`;
                         }
                     },
                     {
@@ -63,8 +62,8 @@ class InternalsPlugin extends bppPlugin {
                     {
                         match: /t:(.{0,2})\.jsx\((.{0,2}),{children:(.{0,2})\.jsx\((.{0,2}),/,
                         replace: "t:$1.jsx($2,{children:$3.jsx($self.componentHook($4,$self),"
-                    }
-
+                    },
+                    ...stylePatches
                 ]
             }
         ]);
