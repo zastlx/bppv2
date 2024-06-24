@@ -1,7 +1,7 @@
 import { iPlugin, iPatch, iDev } from "#types";
-import { Loggable } from "#utils/logger";
+import { Logger } from "#utils/logger";
 
-export abstract class bppPlugin extends Loggable implements iPlugin {
+export abstract class bppPlugin extends Logger implements iPlugin {
     public readonly name: string;
     public readonly version: string;
     public readonly description: string;

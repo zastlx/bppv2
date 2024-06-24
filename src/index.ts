@@ -1,51 +1,53 @@
-import logger from "#utils/logger";
+import logger, { Logger } from "#utils/logger";
 
 import PluginManager from "#plugin/pluginManager";
 import events from "#utils/eventManager";
 import { PatchManager } from "#patcher/hard";
 import { Devs, devsArray } from "#utils/consts";
 
-logger.info("BPP", "Starting up BPP...");
-
-const pm = new PluginManager();
-pm.init();
-
-const pam = new PatchManager();
-pam.init();
-
-console.log("BPP is ready!");
-window.BPP = {
-    pluginManager: pm,
-    patchManager: pam,
-    consts: {
+class BPPClass extends Logger {
+    public pluginManager: PluginManager = new PluginManager();
+    public patchManager: PatchManager = new PatchManager();
+    public pages: any = {}
+    public consts = {
         Devs,
         devsArray
-    },
-    utils: {
-        logger,
+    };
+    public utils = {
         events
+    };
+
+    constructor() {
+        super("BPP", "#5BCEFA");
+
+        this.pluginManager.init();
+        this.patchManager.init();
+
+        this.patchManager.addPatches(this.pluginManager.getPlugins().map((plugin) => plugin.patches).flat());
+        this.patchManager.softReload(true);
     }
-};
-console.log(window.BPP);
+}
 
-pam.addPatches(pm.getPlugins().map((plugin) => plugin.patches).flat());
+const BPP = new BPPClass();
 
-// Reload the patches
-pam.softReload(true);
+window.BPP = BPP;
 
 (async () => {
     if (isDev) {
+        if (window.devWs) return;
+
         console.log("Dev mode enabled, connecting to dev hot-reload server...");
         // @ts-expect-error external module
         const ReconnectingWebSocket = (await import("https://cdn.jsdelivr.net/npm/reconnecting-websocket/+esm")).default;
-        const devWS = new ReconnectingWebSocket("ws://localhost:3000/ws", [], {
+        window.devWs = new ReconnectingWebSocket("ws://localhost:3000/ws", [], {
             maxRetries: 10
         });
-        devWS.onopen = () => devWS.send(JSON.stringify({
+
+        window.devWs.onopen = () => window.devWs.send(JSON.stringify({
             type: "register"
         }));
 
-        devWS.onmessage = async (msg) => {
+        window.devWs.onmessage = async (msg) => {
             const data = JSON.parse(msg.data);
             switch (data.type) {
                 case "reload":
@@ -53,9 +55,11 @@ pam.softReload(true);
                     // avoid direct-eval to make esbuild shut up
                     (0, eval)(await (await fetch("http://localhost:3000/bpp.min.js")).text());
                     break;
+                case "hmr":
+
             }
         };
     }
 })();
 
-export { pam, pm };
+export { BPP };

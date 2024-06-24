@@ -1,4 +1,4 @@
-import { pm } from "#index";
+import { BPP } from "#index";
 import { InternalsPlugin } from "#plugin/plugins/internals";
 import { LinkProps } from "#types";
 import { DashboardStyles } from "#types/blacket/styles";
@@ -6,10 +6,10 @@ import * as styles from "./index.module.css";
 
 
 export default () => {
-    const { blacketScope } = (pm.getPlugin("Internals") as InternalsPlugin);
+    const { blacketScope } = (BPP.pluginManager.getPlugin("Internals") as InternalsPlugin);
     const PageHeader = blacketScope("be") as React.FC<{ children: React.ReactNode }>;
     const Link = blacketScope("t") as React.FC<LinkProps>;
-    const dashboardStyles = (pm.getPlugin("Internals") as InternalsPlugin).styles.dashboard as DashboardStyles;
+    const dashboardStyles = (BPP.pluginManager.getPlugin("Internals") as InternalsPlugin).styles.dashboard as DashboardStyles;
 
     const btns = [
         {
@@ -18,14 +18,14 @@ export default () => {
             link: "/bpp/plugins"
         },
         {
+            icon: "fas fa-cog",
+            text: "Settings",
+            link: "/bpp/credits"
+        },
+        {
             icon: "fas fa-palette",
             text: "Themes",
             link: "/bpp/themes"
-        },
-        {
-            icon: "fas fa-heart",
-            text: "Credits",
-            link: "/bpp/credits"
         }
     ];
 

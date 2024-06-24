@@ -1,4 +1,4 @@
-import { pm } from "#index";
+import { BPP } from "#index";
 import { InternalsPlugin } from "#plugin/plugins/internals";
 const {
     modal,
@@ -18,7 +18,7 @@ const {
     cachedUsers,
     chat,
     contextManu
-} = (pm.getPlugin("Internals") as InternalsPlugin).stores;
+} = (BPP.pluginManager.getPlugin("Internals") as InternalsPlugin).stores;
 
 export {
     modal,

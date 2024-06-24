@@ -1,7 +1,7 @@
 import { BlacketRoute, TopRightContent } from "#types/blacket/pages";
 import Main from ".";
 
-const BPPPage: Partial<BlacketRoute> = {
+const BPPPage = {
     name: "BPP",
     path: "/bpp",
     title: "BPP | Blacket Rewrite",
@@ -12,4 +12,4 @@ const BPPPage: Partial<BlacketRoute> = {
     component: () => <Main />
 };
 
-export { BPPPage };
+export default BPPPage;

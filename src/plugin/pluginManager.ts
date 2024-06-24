@@ -1,9 +1,9 @@
 import { iPluginManager } from "#types";
-import { Loggable } from "#utils/logger";
+import { Logger } from "#utils/logger";
 import { bppPlugin } from "./plugins";
 import getPlugins from "~plugins";
 
-class PluginManager extends Loggable implements iPluginManager {
+class PluginManager extends Logger implements iPluginManager {
     private plugins: bppPlugin[] = [];
     public pluginList: {
         [name: string]: bppPlugin
@@ -11,14 +11,14 @@ class PluginManager extends Loggable implements iPluginManager {
     private inited: boolean = false;
 
     constructor() {
-        super("PluginManager");
+        super("PluginManager", "#F5A9B8");
     }
 
     init(): void {
         this.plugins = getPlugins();
         this.pluginList = this.plugins.reduce((a, b) => (a[b.name] = b, a), {});
 
-        this.log("Initialized");
+        this.info("Initialized");
         this.inited = true;
     }
 

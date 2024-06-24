@@ -5,11 +5,11 @@ import { CompHook, handleVendors } from "./vendors";
 import { ConfigStoreContext, ChatStoreContext, FontStoreContext, PackStoreContext, ModalStoreContext, SocketStoreContext, LoadingStoreContext, CachedUserStoreContext, LeaderboardStoreContext, ContextMenuContext } from "#types/blacket/stores";
 import { Devs } from "#utils/consts";
 import { bppPlugin } from "..";
-import { BPPPage } from "#pages/main/route";
 import * as SocketIOClient from "socket.io-client";
-import { pam } from "#index";
+import { BPP } from "#index";
 import { ChatStyles, DashboardStyles, LeaderboardStyles } from "#types/blacket/styles";
 import { stylePatches } from "./stylePatches";
+import routes from "#pages";
 
 // we really need to move most of this plugins functionality into bpp itself, i dont think its nice having one plugin for all off the internal patches and functionality, we need to refactor at some point
 
@@ -31,6 +31,10 @@ class InternalsPlugin extends bppPlugin {
                     {
                         match: /from".\/index.(.{0,10}).js/,
                         replace: `from"${location.origin}/index.$1.js`
+                    },
+                    {
+                        match: /s\.useState=function\(e\){return j\.current\.useState\(e\)}/,
+                        replace: "s.useState=function(e){debugger;return j.current.useState(e)}"
                     }
                 ]
             },
@@ -46,7 +50,7 @@ class InternalsPlugin extends bppPlugin {
                         match: /import\{(.{0,})\}from"\.\/vendor\.(.{0,10})\.js"/,
                         replace: (match, ...groups) => {
                             // im sorry for anyone who has to read this                            
-                            return `$self.vendors={};$self.vendors._vendors=await import("${pam.files.find((file) => file.path.match(/vendor/)).patchedPath}");$self.handleVendors($self);const {${Object.entries([...groups[0].matchAll(/(.{0,1}) as (.{0,1})/g)].reduce((a, [, key, val]) => (a[key] = val, a), {})).reduce((c, d) => c + `${d[0]}:${d[1]},`, "").slice(0, -1)}}=BPP.pluginManager.getPlugin("Internals").vendors.vendors;$self.pages=$self.pages.map(a=>{a.component=a.component();return a;});$self.styles={};`;
+                            return `$self.vendors={};$self.vendors._vendors=await import("${BPP.patchManager.files.find((file) => file.path.match(/vendor/)).patchedPath}");$self.handleVendors($self);const {${Object.entries([...groups[0].matchAll(/(.{0,1}) as (.{0,1})/g)].reduce((a, [, key, val]) => (a[key] = val, a), {})).reduce((c, d) => c + `${d[0]}:${d[1]},`, "").slice(0, -1)}}=BPP.pluginManager.getPlugin("Internals").vendors.vendors;$self.pages=$self.pages.map(a=>{debugger;a.component=a.component();return a;});$self.styles={};`;
                         }
                     },
                     {
@@ -112,7 +116,7 @@ class InternalsPlugin extends bppPlugin {
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     blacketScope(txt: string): any { }
-    pages = [BPPPage];
+    pages = routes;
     vendors: {
         vendors: { [key: string]: any }
         _vendors: { [key: string]: any }

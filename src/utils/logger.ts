@@ -1,41 +1,33 @@
-class Logger {
-    info(prefix: string, message: string): void {
-        console.log(`${prefix} ${message}`);
+// stolen from https://github.com/Vendicated/Vencord/blob/e9e789be7093e8b025f606cde69b3d89760c9380/src/utils/Logger.ts#L19
+export class Logger {
+    static makeTitle(color: string, title: string): [string, ...string[]] {
+        return ["%c %c %s ", "", `background: ${color}; color: black; font-weight: bold; border-radius: 5px;`, title];
     }
 
-    error(prefix: string, message: string): void {
-        console.error(`${prefix} ${message}`);
+    constructor(public _name: string, public color: string = "white") { }
+
+    private _log(level: "error" | "warn" | "info", levelColor: string, args: any[]) {
+        console[level](
+            `%c BPP %c %c ${this._name}`,
+            `background: ${levelColor}; color: black; font-weight: bold; border-radius: 5px;`,
+            "",
+            `background: ${this.color}; color: black; font-weight: bold; border-radius: 5px;`
+            , ...args
+        );
     }
 
-    warn(prefix: string, message: string): void {
-        console.warn(`${prefix} ${message}`);
-    }
-}
-
-const logger = new Logger();
-
-class Loggable {
-    private prefix: string;
-
-    constructor(prefix: string) {
-        this.prefix = prefix;
+    public info(...args: any[]) {
+        this._log("info", "#a6d189", args);
     }
 
-    log(message: string): void {
-        logger.info(this.prefix, message);
+    public error(...args: any[]) {
+        this._log("error", "#e78284", args);
     }
 
-    error(message: string): void {
-        logger.error(this.prefix, message);
-    }
-
-    warn(message: string): void {
-        logger.warn(this.prefix, message);
+    public warn(...args: any[]) {
+        this._log("warn", "#e5c890", args);
     }
 }
 
-export default logger;
-export {
-    Loggable,
-    Logger
-};
+
+export default Logger;

@@ -1,5 +1,5 @@
 import { iPatch } from "#types/patcher";
-import { Loggable } from "#utils/logger";
+import { Logger } from "#utils/logger";
 
 interface iFile {
     // Relative path to the file (e.g "./index.random.js")
@@ -14,18 +14,18 @@ interface iFile {
     patchedBy: string[]
 }
 
-class PatchManager extends Loggable {
+class PatchManager extends Logger {
     private blacklistedFiles: RegExp[] = [];
     private inited = false;
     private allPatches: iPatch[] = [];
     public files: iFile[] = [];
 
     constructor() {
-        super("PatchManager");
+        super("PatchManager", "#5BCEFA");
     }
 
     init() {
-        this.log("Initialized");
+        this.info("Initialized");
         this.inited = true;
     }
 
@@ -52,18 +52,24 @@ class PatchManager extends Loggable {
             });
 
             for (const patch of patches) {
-                if (!file.patchedBy.includes(patch.plugin)) file.patchedBy.push(patch.plugin);
+                const oldPatched = file.patched;
 
                 if (Array.isArray(patch.replacement))
                     for (const replacement of patch.replacement) {
+                        const oldPatched_ = file.patched;
                         if (replacement.replace instanceof Function) file.patched = file.patched.replace(replacement.match, replacement.replace(file.patched.match(replacement.match)[0], ...file.patched.match(replacement.match).slice(1))).replaceAll("$self", `window.BPP.pluginManager.getPlugin("${patch.plugin}")`);
                         else file.patched = file.patched.replace(replacement.match, replacement.replace).replaceAll("$self", `window.BPP.pluginManager.getPlugin("${patch.plugin}")`);
+                        if (oldPatched_ === file.patched) this.warn(`Patch "${replacement.match}" by plugin "${patch.plugin}" had no effect.`);
                     }
                 // file.patched = file.patched.replace(replacement.match, replacement.replace.replaceAll("$self", `window.BPP.pluginManager.getPlugin("${patch.plugin}")`));
                 else {
+                    const oldPatched_ = file.patched;
                     if (patch.replacement.replace instanceof Function) file.patched = patch.replacement.replace(file.patched.match(patch.replacement.match)[0], ...file.patched.match(patch.replacement.match).slice(1)).replaceAll("$self", `window.BPP.pluginManager.getPlugin("${patch.plugin}")`);
                     else file.patched = file.patched.replace(patch.replacement.match, patch.replacement.replace).replaceAll("$self", `window.BPP.pluginManager.getPlugin("${patch.plugin}")`);
+                    if (oldPatched_ === file.patched) this.warn(`Patch "${patch.replacement.match}" by plugin "${patch.plugin}" had no effect.`);
                 }
+
+                if (oldPatched !== file.patched && !file.patchedBy.includes(patch.plugin)) file.patchedBy.push(patch.plugin);
             }
             file.patchedPath = URL.createObjectURL(new Blob([`// ${file.path.replace(`${location.origin}/`, "")} ${file.patchedBy.length > 0 ? `- Patched By ${file.patchedBy.join(", ")}` : ""}\n`, file.patched], { type: "application/javascript" }));
         }

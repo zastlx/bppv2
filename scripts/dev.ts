@@ -56,7 +56,7 @@ for await (const _ of watcher) {
     _;
     console.log(`[${chalk.magenta("Watcher")}] ${chalk.green("File changed, rebuilding...")}`);
     await spawnSync({
-        cmd: ["bun", "run", "build"],
+        cmd: ["bun", "run", "build:dev"],
         stdout: "pipe",
         stderr: "pipe"
     });
