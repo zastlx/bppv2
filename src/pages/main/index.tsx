@@ -2,7 +2,7 @@ import { BPP } from "#index";
 import { InternalsPlugin } from "#plugin/plugins/internals";
 import { LinkProps } from "#types";
 import { DashboardStyles } from "#types/blacket/styles";
-import * as styles from "./index.module.css";
+import * as styles from "./main.module.css";
 
 
 export default () => {

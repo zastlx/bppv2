@@ -31,10 +31,6 @@ class InternalsPlugin extends bppPlugin {
                     {
                         match: /from".\/index.(.{0,10}).js/,
                         replace: `from"${location.origin}/index.$1.js`
-                    },
-                    {
-                        match: /s\.useState=function\(e\){return j\.current\.useState\(e\)}/,
-                        replace: "s.useState=function(e){debugger;return j.current.useState(e)}"
                     }
                 ]
             },
@@ -50,7 +46,7 @@ class InternalsPlugin extends bppPlugin {
                         match: /import\{(.{0,})\}from"\.\/vendor\.(.{0,10})\.js"/,
                         replace: (match, ...groups) => {
                             // im sorry for anyone who has to read this                            
-                            return `$self.vendors={};$self.vendors._vendors=await import("${BPP.patchManager.files.find((file) => file.path.match(/vendor/)).patchedPath}");$self.handleVendors($self);const {${Object.entries([...groups[0].matchAll(/(.{0,1}) as (.{0,1})/g)].reduce((a, [, key, val]) => (a[key] = val, a), {})).reduce((c, d) => c + `${d[0]}:${d[1]},`, "").slice(0, -1)}}=BPP.pluginManager.getPlugin("Internals").vendors.vendors;$self.pages=$self.pages.map(a=>{debugger;a.component=a.component();return a;});$self.styles={};`;
+                            return `$self.vendors={};$self.vendors._vendors=await import("${BPP.patchManager.files.find((file) => file.path.match(/vendor/)).patchedPath}");$self.handleVendors($self);const {${Object.entries([...groups[0].matchAll(/(.{0,1}) as (.{0,1})/g)].reduce((a, [, key, val]) => (a[key] = val, a), {})).reduce((c, d) => c + `${d[0]}:${d[1]},`, "").slice(0, -1)}}=BPP.pluginManager.getPlugin("Internals").vendors.vendors;$self.pages=$self.pages.map(a=>{a.component=a.component();return a;});$self.styles={};`;
                         }
                     },
                     {

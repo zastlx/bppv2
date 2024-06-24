@@ -2,8 +2,7 @@ import { iPatchReplacement } from "#types/patcher";
 
 const stylePatches: iPatchReplacement[] = [
     ["wrapper", "leaderboard"],
-    ["parentHolder", "dashboard"],
-    ["container", "chat"]
+    ["parentHolder", "dashboard"]
 ].map((a) => {
     return {
         match: new RegExp(`const (.{0,4})={${a[0]}:"${a[1]}`),

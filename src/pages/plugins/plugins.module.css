@@ -1,0 +1,38 @@
+.mainText {
+    color: white;
+}
+
+.header {
+    font-family: Titan One, sans-serif;
+}
+
+.section {
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, .25));
+    border-radius: 7px;
+    padding-top: 6vh;
+    padding-bottom: 6vh;
+    margin-left: 10vw;
+    margin-right: 10vw;
+    background-color: #00000020;
+
+}
+
+.container {
+    padding-top: 0;
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+}
+
+.toggleButton {
+    background-color: transparent;
+    border: 3px solid white;
+    border-radius: 5px;
+    width: 10px;
+    height: 10px;
+    transition: background-color 0.2s;
+}
+
+.toggleButton.active {
+    background-color: white;
+}

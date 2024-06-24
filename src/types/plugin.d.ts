@@ -4,6 +4,7 @@ interface iPlugin {
     name: string;
     description: string;
     version: string;
+    enabled: boolean;
 
     authors: Dev[];
 
@@ -18,6 +19,9 @@ interface iPluginManager {
 
     enableAll(): void;
     disableAll(): void;
+    enablePlugin(name: string): void;
+    disablePlugin(name: string): void;
+    togglePlugin(name: string): void;
     getPlugin(name: string): iPlugin;
     getPlugins(): iPlugin[];
 }

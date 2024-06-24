@@ -8,6 +8,7 @@ export abstract class bppPlugin extends Logger implements iPlugin {
     public readonly authors: iDev[];
 
     public patches: iPatch[];
+    public enabled: boolean = false;
 
     constructor(name: string, version: string = "0.0.1", description: string = "An example plugin", authors?: iDev[]) {
         super(name);

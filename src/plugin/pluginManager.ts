@@ -23,11 +23,45 @@ class PluginManager extends Logger implements iPluginManager {
     }
 
     enableAll(): void {
-        this.plugins.forEach((plugin) => plugin.onEnable());
+        this.plugins.forEach((plugin) => {
+            plugin.enabled = true;
+            plugin.onEnable();
+        });
     }
 
     disableAll(): void {
-        this.plugins.forEach((plugin) => plugin.onDisable());
+        this.plugins.forEach((plugin) => {
+            plugin.enabled = false;
+            plugin.onDisable();
+        });
+    }
+
+    enablePlugin(name: string): void {
+        const plugin = this.getPlugin(name);
+        if (plugin) {
+            plugin.enabled = true;
+            plugin.onEnable();
+        }
+    }
+
+    disablePlugin(name: string): void {
+        const plugin = this.getPlugin(name);
+        if (plugin) {
+            plugin.enabled = false;
+            plugin.onDisable();
+        }
+    }
+
+    togglePlugin(name: string): void {
+        const plugin = this.getPlugin(name);
+        if (plugin) {
+            plugin.enabled = !plugin.enabled;
+            if (plugin.enabled) {
+                plugin.onEnable();
+            } else {
+                plugin.onDisable();
+            }
+        }
     }
 
     getPlugin(name: string): bppPlugin {
