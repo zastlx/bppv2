@@ -37,7 +37,7 @@ app.ws("/ws", (ws) => {
     });
 });
 
-app.use(express.static(path.join(__dirname, "..", "dist2")));
+app.use(express.static(path.join(__dirname, "..", "")));
 
 
 app.listen(3000, () => {

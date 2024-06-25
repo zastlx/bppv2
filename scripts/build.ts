@@ -102,4 +102,4 @@ console.log(`
     ${chalk.magenta("dist/")}bpp.min.js    ${chalk.redBright(minSize.toFixed(2))}kb
     ${chalk.magenta("dist/")}bpp.full.js   ${chalk.redBright(fullSize.toFixed(2))}kb
     ${chalk.magenta("dist/")}bpp.user.js   ${chalk.redBright(userScriptSize.toFixed(2))}kb
-`)
+`);
