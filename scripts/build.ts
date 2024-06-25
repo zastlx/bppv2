@@ -49,7 +49,7 @@ await build({
     },
     define: defines,
     sourcemap: false,
-    outfile: "dist2/bpp.full.js"
+    outfile: "dist/bpp.full.js"
 });
 
 
@@ -66,40 +66,40 @@ await build({
     },
     define: defines,
     sourcemap: true,
-    outfile: "dist2/bpp.min.js"
+    outfile: "dist/bpp.min.js"
 });
 
 // embedding css into the script bcuz esbuild has no support for that :/
-let min = (await readFile("dist2/bpp.min.js", "utf-8")).trim();
-let full = (await readFile("dist2/bpp.full.js", "utf-8")).trim();
-const cssMin = (await readFile("dist2/bpp.min.css", "utf-8")).trim().split("\n");
-const cssFull = (await readFile("dist2/bpp.full.css", "utf-8")).trim();
+let min = (await readFile("dist/bpp.min.js", "utf-8")).trim();
+let full = (await readFile("dist/bpp.full.js", "utf-8")).trim();
+const cssMin = (await readFile("dist/bpp.min.css", "utf-8")).trim().split("\n");
+const cssFull = (await readFile("dist/bpp.full.css", "utf-8")).trim();
 cssMin.pop();
 min = min.replace("CSS_HERE", cssMin.join("\n"));
 full = full.replace("\"CSS_HERE\"", `\`${cssFull}\``);
 
-await writeFile("dist2/bpp.min.js", min);
-await writeFile("dist2/bpp.full.js", full);
+await writeFile("dist/bpp.min.js", min);
+await writeFile("dist/bpp.full.js", full);
 
 const rmIfExist = async (path: string) => await exists(path) && await rm(path);
 
-await rmIfExist("dist2/bpp.min.css");
-await rmIfExist("dist2/bpp.min.css.map");
-await rmIfExist("dist2/bpp.full.css");
+await rmIfExist("dist/bpp.min.css");
+await rmIfExist("dist/bpp.min.css.map");
+await rmIfExist("dist/bpp.full.css");
 
 // userscript creation
-const userScriptCode = `${userScriptBanner}\n${await readFile("dist2/bpp.min.js")}`;
-await writeFile("dist2/bpp.user.js", userScriptCode.replaceAll("//# sourceMappingURL=bpp.js.map", ""));
+const userScriptCode = `${userScriptBanner}\n${await readFile("dist/bpp.min.js")}`;
+await writeFile("dist/bpp.user.js", userScriptCode.replaceAll("//# sourceMappingURL=bpp.js.map", ""));
 
 // get size of files in kb
-const minSize = (await readFile("dist2/bpp.min.js")).length / 1024;
-const fullSize = (await readFile("dist2/bpp.full.js")).length / 1024;
-const userScriptSize = (await readFile("dist2/bpp.user.js")).length / 1024;
+const minSize = (await readFile("dist/bpp.min.js")).length / 1024;
+const fullSize = (await readFile("dist/bpp.full.js")).length / 1024;
+const userScriptSize = (await readFile("dist/bpp.user.js")).length / 1024;
 
 
 console.log(`
 - ⚡ Built in ${chalk.redBright((Date.now() - time) / 1000)}s
-    ${chalk.magenta("dist2/")}bpp.min.js    ${chalk.redBright(minSize.toFixed(2))}kb
-    ${chalk.magenta("dist2/")}bpp.full.js   ${chalk.redBright(fullSize.toFixed(2))}kb
-    ${chalk.magenta("dist2/")}bpp.user.js   ${chalk.redBright(userScriptSize.toFixed(2))}kb
+    ${chalk.magenta("dist/")}bpp.min.js    ${chalk.redBright(minSize.toFixed(2))}kb
+    ${chalk.magenta("dist/")}bpp.full.js   ${chalk.redBright(fullSize.toFixed(2))}kb
+    ${chalk.magenta("dist/")}bpp.user.js   ${chalk.redBright(userScriptSize.toFixed(2))}kb
 `)
