@@ -37,6 +37,12 @@
 - **[PLANNING/BRAINSTORMING]** API wrapper exposed internally and to user-defined plugins
     - ***Caveats*** - Cannot make APIs to write to chat or purchase from bazaar.
 
+---
+**Plugins**
+- **[PLANNING/BRAINSTORMING]** Staff
+- **[PLANNING/BRAINSTORMING]** Pack opener
+- **[PLANNING/BRAINSTORMING]** Mini chat
+
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 ## Doing
 - **[IN PROGRESS]** User themes with extreme support for easy, extensible UI customization through defined variables and presets for BPP and Blacket's UI classes.
