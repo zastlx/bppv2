@@ -83,9 +83,9 @@ await writeFile("dist/bpp.full.js", full);
 
 const rmIfExist = async (path: string) => await exists(path) && await rm(path);
 
-await rmIfExist("dist/bpp.min.css");
-await rmIfExist("dist/bpp.min.css.map");
-await rmIfExist("dist/bpp.full.css");
+// await rmIfExist("dist/bpp.min.css");
+// await rmIfExist("dist/bpp.min.css.map");
+// await rmIfExist("dist/bpp.full.css");
 
 // userscript creation
 const userScriptCode = `${userScriptBanner}\n${await readFile("dist/bpp.min.js")}`;

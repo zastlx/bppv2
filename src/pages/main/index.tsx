@@ -39,7 +39,7 @@ export default () => {
                 }} className={`${dashboardStyles.smallButtonContainer} ${styles.container}`}>
                     {
                         btns.map((btn, i) => (
-                            <Link to={btn.link} className={dashboardStyles.topRightButton} key={i}>
+                            <Link to={btn.link} className={`${dashboardStyles.topRightButton} ${styles.styledButton}`} key={i}>
                                 <i className={btn.icon} />
                                 <div>{btn.text}</div>
                             </Link>
