@@ -1,6 +1,6 @@
 import { Patch } from './patcher.d';
 
-interface iPlugin {
+export interface iPlugin {
     name: string;
     description: string;
     version: string;
@@ -12,9 +12,9 @@ interface iPlugin {
     onDisable(): void;
 
     patches: Patch[];
-}
+};
 
-interface iPluginManager {
+export interface iPluginManager {
     init(): void;
 
     enableAll(): void;
@@ -24,6 +24,4 @@ interface iPluginManager {
     togglePlugin(name: string): void;
     getPlugin(name: string): iPlugin;
     getPlugins(): iPlugin[];
-}
-
-export { iPlugin, iPluginManager };
+};

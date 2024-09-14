@@ -44,17 +44,33 @@ class InternalsPlugin extends bppPlugin {
                     },
                     {
                         match: /import\{(.{0,})\}from"\.\/vendor\.(.{0,10})\.js"/,
-                        replace: (match, ...groups) => {
-                            // im sorry for anyone who has to read this                            
-                            return `$self.vendors={};$self.vendors._vendors=await import("${BPP.patchManager.files.find((file) => file.path.match(/vendor/)).patchedPath}");$self.handleVendors($self);const {${Object.entries([...groups[0].matchAll(/(.{0,1}) as (.{0,1})/g)].reduce((a, [, key, val]) => (a[key] = val, a), {})).reduce((c, d) => c + `${d[0]}:${d[1]},`, "").slice(0, -1)}}=BPP.pluginManager.getPlugin("Internals").vendors.vendors;$self.pages=$self.pages.map(a=>{a.component=a.component();return a;});$self.styles={};`;
+                        replace: (_match, ...groups) => {
+                            const actions: string[] = [];
+
+                            // // im sorry for anyone who has to read this      
+                            // return `$self.vendors={};$self.vendors._vendors=await import("${BPP.patchManager.files.find((file) => file.path.match(/vendor/)).patchedPath}");$self.handleVendors($self);const {${Object.entries([...groups[0].matchAll(/(.{0,1}) as (.{0,1})/g)].reduce((a, [, key, val]) => (a[key] = val, a), {})).reduce((c, d) => c + `${d[0]}:${d[1]},`, "").slice(0, -1)}}=BPP.pluginManager.getPlugin("Internals").vendors.vendors;$self.pages=$self.pages.map(a=>{a.component=a.component();return a;});$self.styles={};`;
+
+                            actions.push("$self.vendors={};");
+                            actions.push(`$self.vendors._vendors=await import("${BPP.patchManager.files.find((file) => file.path.match(/vendor/)).patchedPath}");`)
+                            actions.push("$self.handleVendors($self);");
+
+                            const vendorMap = Object.entries([...groups[0].matchAll(/(.{0,1}) as (.{0,1})/g)].reduce((a, [, key, val]) => (a[key] = val, a), {})).reduce((c, d) => c + `${d[0]}:${d[1]},`, "").slice(0, -1);
+                            actions.push(`const {${vendorMap}}=BPP.pluginManager.getPlugin("Internals").vendors.vendors;`);
+
+                            actions.push("$self.pages=$self.pages.map(a=>{a.component=a.component();return a;});");
+                            actions.push("$self.styles={};");
+
+                            return actions.join("");
                         }
                     },
+                    // add bpp pages
                     {
                         match: /AuctionHouse:(.{0,3}),/,
                         replace: (_match, ...groups) => {
                             return `AuctionHouse:${groups[0]},${this.pages.map((page, i) => `${page.name}:$self.pages[${i}]`).join(",")},`;
                         }
                     },
+                    // turn store button into bpp button
                     {
                         match: /{to:"\/store",icon:"fas fa-cart-shopping",className:(.{0,3}),backgroundColor:"#2b22c2",children:"Visit Store"}/,
                         replace: "{to:\"/bpp\",icon:\"fas fa-plus\",className:$1,backgroundColor:\"#ff00d8\",children:\"BPP\"}"
@@ -110,6 +126,7 @@ class InternalsPlugin extends bppPlugin {
         contextManu: Context<ContextMenuContext>
     }> = {};
 
+    // this is reassinged in the patch properly
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     blacketScope(txt: string): any { }
     pages = routes;

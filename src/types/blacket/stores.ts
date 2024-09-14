@@ -36,7 +36,6 @@ export interface LoadingStoreContext {
     setLoading: (loading: boolean | string) => void;
 }
 
-
 export interface Modals {
     id: string;
     modal: ReactNode;

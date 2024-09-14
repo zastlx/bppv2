@@ -1,6 +1,7 @@
 import logger, { Logger } from "#utils/logger";
 
 import PluginManager from "#plugin/pluginManager";
+import SettingsManager from "#settings/settingsManager";
 import events from "#utils/eventManager";
 import { PatchManager } from "#patcher/hard";
 import { Devs, devsArray } from "#utils/consts";
@@ -8,6 +9,7 @@ import { Devs, devsArray } from "#utils/consts";
 class BPPClass extends Logger {
     public pluginManager: PluginManager = new PluginManager();
     public patchManager: PatchManager = new PatchManager();
+    public settingsManager: SettingsManager = new SettingsManager();
     public pages: any = {}
     public consts = {
         Devs,

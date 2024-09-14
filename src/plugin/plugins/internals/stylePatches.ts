@@ -3,10 +3,10 @@ import { iPatchReplacement } from "#types/patcher";
 const stylePatches: iPatchReplacement[] = [
     ["wrapper", "leaderboard"],
     ["parentHolder", "dashboard"]
-].map((a) => {
+].map((patch) => {
     return {
-        match: new RegExp(`const (.{0,4})={${a[0]}:"${a[1]}`),
-        replace: `const $1=$self.styles["${a[1]}"]={${a[0]}:"${a[1]}`
+        match: new RegExp(`const (.{0,4})={${patch[0]}:"${patch[1]}`),
+        replace: `const $1=$self.styles["${patch[1]}"]={${patch[0]}:"${patch[1]}`
     };
 });
 

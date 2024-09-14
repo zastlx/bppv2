@@ -4,10 +4,9 @@ import { iPluginManager, iPlugin } from "./plugin";
 
 import { PatchManager } from "#patcher/hard";
 import PluginManager from "#plugin/pluginManager";
-import { Logger } from "#utils/logger";
 import { Events } from "#utils/eventManager";
 
-interface BppGlobal {
+export interface BppGlobal {
     pluginManager: PluginManager;
     patchManager: PatchManager;
     consts: {

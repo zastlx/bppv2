@@ -17,16 +17,14 @@ class SettingsManager extends Logger {
         get main() {
             return {};
         },
-        set main() {
-        },
-        set plugins() {
-        },
         get plugins() {
             let plugins = JSON.parse(localStorage.getItem("plugins") || "{}");
             if (Object.keys(plugins).length === 0) {
                 plugins = BPP.pluginManager.getPlugins().reduce((a, b) => (a[b.name] = false, a), {});
                 localStorage.setItem("plugins", JSON.stringify(plugins));
             }
+
+            return plugins
         }
     };
 
@@ -42,7 +40,13 @@ class SettingsManager extends Logger {
     }
 
     public updatePluginState(name: string, state: boolean): void {
+        if (!this.inited) return;
 
+        const plugins = this.settings.plugins;
+        plugins[name] = state;
+
+        localStorage.setItem("plugins", JSON.stringify(plugins));
+    }
 }
 
 export default SettingsManager;
