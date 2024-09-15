@@ -16,15 +16,15 @@ export class Logger {
         );
     }
 
-    public info(...args: any[]) {
+    protected info(...args: any[]) {
         this._log("info", "#a6d189", args);
     }
 
-    public error(...args: any[]) {
+    protected error(...args: any[]) {
         this._log("error", "#e78284", args);
     }
 
-    public warn(...args: any[]) {
+    protected warn(...args: any[]) {
         this._log("warn", "#e5c890", args);
     }
 }

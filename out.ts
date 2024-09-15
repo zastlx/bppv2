@@ -1,13 +1,13 @@
 import { CSSProperties } from "react";
+import { Resource } from "@blacket/types";
+import { PlacementType } from "src/views/Leaderboard/leaderboard";
+import { PublicUser } from "@blacket/types";
+import { PrivateUser } from "@blacket/types";
+import { AuctionsAuctionEntity, AuctionsSearchAuctionDto } from "@blacket/types";
+import { Socket } from "socket.io-client";
 import type * as Square from "@square/web-payments-sdk-types";
 import { ReactNode } from "react";
 import { Banner, Blook, Emoji, Font, Item, ItemShop, Pack, Rarity, Title } from "@blacket/types";
-import { Resource } from "@blacket/types";
-import { PrivateUser } from "@blacket/types";
-import { PlacementType } from "/home/zastix/projects/blacket/Blacket/frontend/src/views/Leaderboard/leaderboard";
-import { PublicUser } from "@blacket/types";
-import { Socket } from "socket.io-client";
-import { AuctionsAuctionEntity, AuctionsSearchAuctionDto } from "@blacket/types";
 import { Message } from "@blacket/types";
 
 
@@ -27,53 +27,6 @@ export interface TypingUser {
     userId: string;
     startedTypingAt: number;
 }
-
-export interface AuctionHouseStoreContext {
-    loading: boolean;
-    setLoading: (loading: boolean) => void;
-    auctions: AuctionsAuctionEntity[];
-    setAuctions: (auctions: AuctionsAuctionEntity[]) => void;
-    search: AuctionsSearchAuctionDto;
-    setSearch: (search: AuctionsSearchAuctionDto) => void;
-    getAuctions: () => void;
-}
-
-
-export interface SocketStoreContext {
-    socket: Socket | null,
-    connected: boolean,
-    initializeSocket: () => void
-}
-
-
-
-export interface LeaderboardStoreContext {
-    sortBy: PlacementType;
-    setSortBy: (sortBy: PlacementType) => void;
-    leaderboard: {
-        tokens: PublicUser[];
-        experience: PublicUser[];
-    } | null;
-    setLeaderboard: (leaderboard: {
-        tokens: PublicUser[];
-        experience: PublicUser[];
-    }) => void;
-}
-
-
-export interface UserStoreContext {
-    user: PrivateUser | null;
-    setUser: (user: PrivateUser | null) => void;
-    getUserAvatarPath: (user: PrivateUser) => string;
-}
-
-
-export interface ResourceStoreContext {
-    resources: Resource[];
-    setResources: (resources: Resource[]) => void;
-    resourceIdToPath: (id: number) => string;
-}
-
 
 export interface DataStoreContext {
     badges: any[];
@@ -100,13 +53,13 @@ export interface DataStoreContext {
     titleIdToText: (id: number) => string;
     fontIdToName: (id: number) => string;
 }
+export interface Config {
+    version: string
+}
 
-
-export interface CachedUserStoreContext {
-    cachedUsers: PublicUser[];
-    setCachedUsers: (cachedUsers: PublicUser[]) => void;
-    addCachedUser: (userId: string) => Promise<PublicUser>;
-    addCachedUserWithData: (user: PublicUser) => void;
+export interface ConfigStoreContext {
+    config: Config | null,
+    setConfig: (config: Config) => void
 }
 export interface LoadingStoreContext {
     loading: boolean | string;
@@ -130,13 +83,60 @@ export interface ModalStoreContext {
 export interface SquareStoreContext {
     payments: Square.Payments | null;
 }
-export interface Config {
-    version: string
+
+
+export interface SocketStoreContext {
+    socket: Socket | null,
+    connected: boolean,
+    initializeSocket: () => void
 }
 
-export interface ConfigStoreContext {
-    config: Config | null,
-    setConfig: (config: Config) => void
+
+export interface AuctionHouseStoreContext {
+    loading: boolean;
+    setLoading: (loading: boolean) => void;
+    auctions: AuctionsAuctionEntity[];
+    setAuctions: (auctions: AuctionsAuctionEntity[]) => void;
+    search: AuctionsSearchAuctionDto;
+    setSearch: (search: AuctionsSearchAuctionDto) => void;
+    getAuctions: () => void;
+}
+
+
+export interface UserStoreContext {
+    user: PrivateUser | null;
+    setUser: (user: PrivateUser | null) => void;
+    getUserAvatarPath: (user: PrivateUser) => string;
+}
+
+
+export interface CachedUserStoreContext {
+    cachedUsers: PublicUser[];
+    setCachedUsers: (cachedUsers: PublicUser[]) => void;
+    addCachedUser: (userId: string) => Promise<PublicUser>;
+    addCachedUserWithData: (user: PublicUser) => void;
+}
+
+
+
+export interface LeaderboardStoreContext {
+    sortBy: PlacementType;
+    setSortBy: (sortBy: PlacementType) => void;
+    leaderboard: {
+        tokens: PublicUser[];
+        experience: PublicUser[];
+    } | null;
+    setLeaderboard: (leaderboard: {
+        tokens: PublicUser[];
+        experience: PublicUser[];
+    }) => void;
+}
+
+
+export interface ResourceStoreContext {
+    resources: Resource[];
+    setResources: (resources: Resource[]) => void;
+    resourceIdToPath: (id: number) => string;
 }
 
 

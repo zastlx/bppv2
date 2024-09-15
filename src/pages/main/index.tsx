@@ -7,8 +7,8 @@ import * as styles from "./main.module.css";
 
 export default () => {
     const { blacketScope } = (BPP.pluginManager.getPlugin("Internals") as InternalsPlugin);
-    const PageHeader = blacketScope("be") as React.FC<{ children: React.ReactNode }>;
-    const Link = blacketScope("t") as React.FC<LinkProps>;
+    const PageHeader = blacketScope("Ye") as React.FC<{ children: React.ReactNode }>;
+    const Link = blacketScope("o") as React.FC<LinkProps>;
     const dashboardStyles = (BPP.pluginManager.getPlugin("Internals") as InternalsPlugin).styles.dashboard as DashboardStyles;
 
     const btns = [
@@ -39,7 +39,7 @@ export default () => {
                 }} className={`${dashboardStyles.smallButtonContainer} ${styles.container}`}>
                     {
                         btns.map((btn, i) => (
-                            <Link to={btn.link} className={`${dashboardStyles.topRightButton} ${styles.styledButton}`} key={i}>
+                            <Link to={btn.link} className={`${styles.topRightButton} ${styles.styledButton}`} key={i}>
                                 <i className={btn.icon} />
                                 <div>{btn.text}</div>
                             </Link>

@@ -1,17 +1,9 @@
-import React, { Context } from "react";
-import ReactDOM from "react-dom";
-import { CompHook, handleVendors } from "./vendors";
-
-import { ConfigStoreContext, ChatStoreContext, FontStoreContext, PackStoreContext, ModalStoreContext, SocketStoreContext, LoadingStoreContext, CachedUserStoreContext, LeaderboardStoreContext, ContextMenuContext } from "#types/blacket/stores";
 import { Devs } from "#utils/consts";
 import { bppPlugin } from "..";
-import * as SocketIOClient from "socket.io-client";
 import { BPP } from "#index";
 import { ChatStyles, DashboardStyles, LeaderboardStyles } from "#types/blacket/styles";
 import { stylePatches } from "./stylePatches";
 import routes from "#pages";
-
-// we really need to move most of this plugins functionality into bpp itself, i dont think its nice having one plugin for all off the internal patches and functionality, we need to refactor at some point
 
 class InternalsPlugin extends bppPlugin {
     constructor() {
@@ -50,12 +42,12 @@ class InternalsPlugin extends bppPlugin {
                             // // im sorry for anyone who has to read this      
                             // return `$self.vendors={};$self.vendors._vendors=await import("${BPP.patchManager.files.find((file) => file.path.match(/vendor/)).patchedPath}");$self.handleVendors($self);const {${Object.entries([...groups[0].matchAll(/(.{0,1}) as (.{0,1})/g)].reduce((a, [, key, val]) => (a[key] = val, a), {})).reduce((c, d) => c + `${d[0]}:${d[1]},`, "").slice(0, -1)}}=BPP.pluginManager.getPlugin("Internals").vendors.vendors;$self.pages=$self.pages.map(a=>{a.component=a.component();return a;});$self.styles={};`;
 
-                            actions.push("$self.vendors={};");
-                            actions.push(`$self.vendors._vendors=await import("${BPP.patchManager.files.find((file) => file.path.match(/vendor/)).patchedPath}");`)
-                            actions.push("$self.handleVendors($self);");
+                            actions.push("BPP.vendorManager.vendors={};");
+                            actions.push(`BPP.vendorManager.vendors._vendors=await import("${BPP.patchManager.files.find((file) => file.path.match(/vendor/)).patchedPath}");`)
+                            actions.push("BPP.vendorManager.init();");
 
                             const vendorMap = Object.entries([...groups[0].matchAll(/(.{0,1}) as (.{0,1})/g)].reduce((a, [, key, val]) => (a[key] = val, a), {})).reduce((c, d) => c + `${d[0]}:${d[1]},`, "").slice(0, -1);
-                            actions.push(`const {${vendorMap}}=BPP.pluginManager.getPlugin("Internals").vendors.vendors;`);
+                            actions.push(`const {${vendorMap}}=BPP.vendorManager.vendors.vendors;`);
 
                             actions.push("$self.pages=$self.pages.map(a=>{a.component=a.component();return a;});");
                             actions.push("$self.styles={};");
@@ -77,73 +69,18 @@ class InternalsPlugin extends bppPlugin {
                     },
                     {
                         match: /t:(.{0,2})\.jsx\((.{0,2}),{children:(.{0,2})\.jsx\((.{0,2}),/,
-                        replace: "t:$1.jsx($2,{children:$3.jsx($self.componentHook($4,$self),"
+                        replace: "t:$1.jsx($2,{children:$3.jsx(BPP.storeManager.componentHook($4,$self),"
                     },
                     ...stylePatches
                 ]
             }
         ]);
     }
-    handleVendors = handleVendors;
-    componentHook = CompHook;
-    // alot of these stores are not typed bcuz i pulled them directly from blacket github repo and they are not typed there (thanks xotic)
-    stores: Partial<{
-        modal: Context<ModalStoreContext>,
-        user: Context<any>,
-        socket: Context<SocketStoreContext>,
-        fonts: Context<FontStoreContext>,
-        config: Context<ConfigStoreContext>,
-        loading: Context<LoadingStoreContext>,
-        leaderboard: Context<LeaderboardStoreContext>,
-        blooks: Context<any>,
-        rarities: Context<any>,
-        packs: Context<PackStoreContext>,
-        items: Context<any>,
-        banners: Context<any>,
-        badges: Context<any>,
-        emojis: Context<any>,
-        cachedUsers: Context<CachedUserStoreContext>,
-        chat: Context<ChatStoreContext>,
-        contextManu: Context<ContextMenuContext>
-    }> = {};
-    storeProviders: Partial<{
-        modal: Context<ModalStoreContext>,
-        user: Context<any>,
-        socket: Context<SocketStoreContext>,
-        fonts: Context<FontStoreContext>,
-        config: Context<ConfigStoreContext>,
-        loading: Context<LoadingStoreContext>,
-        leaderboard: Context<LeaderboardStoreContext>,
-        blooks: Context<any>,
-        rarities: Context<any>,
-        packs: Context<PackStoreContext>,
-        items: Context<any>,
-        banners: Context<any>,
-        badges: Context<any>,
-        emojis: Context<any>,
-        cachedUsers: Context<CachedUserStoreContext>,
-        chat: Context<ChatStoreContext>,
-        contextManu: Context<ContextMenuContext>
-    }> = {};
 
-    // this is reassinged in the patch properly
+    // this should be removed in production
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     blacketScope(txt: string): any { }
     pages = routes;
-    vendors: {
-        vendors: { [key: string]: any }
-        _vendors: { [key: string]: any }
-        normalized: {
-            React: typeof React,
-            ReactDOM: typeof ReactDOM,
-            SocketIOClient: typeof SocketIOClient
-        }
-        map: {
-            React: string,
-            ReactDOM: string,
-            SocketIOClient: string
-        }
-    };
     styles: {
         dashboard: DashboardStyles,
         leaderboard: LeaderboardStyles,

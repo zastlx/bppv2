@@ -60,9 +60,9 @@ for await (const _ of watcher) {
         stdout: "pipe",
         stderr: "pipe"
     });
-    console.log(`[${chalk.magenta("Watcher")}] ${chalk.green("Rebuilt!")}`);
+    console.log(`[${chalk.magenta("Watcher")}] Rebuilt!`);
     for (const client of clients) {
         client.send(JSON.stringify({ type: "reload" }));
     }
-    console.log(`[${chalk.magenta("Watcher")}] ${chalk.green("Reloaded clients")}`);
+    console.log(`[${chalk.magenta("Watcher")}] Reloaded clients.`);
 }

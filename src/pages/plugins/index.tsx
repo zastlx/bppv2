@@ -11,15 +11,16 @@ interface HeaderProps {
 };
 
 export default () => {
-    const { blacketScope, vendors } = (BPP.pluginManager.getPlugin("Internals") as InternalsPlugin);
-    const PageHeader = blacketScope("Ne") as React.FC<{ children: React.ReactNode }>;
-    const Container = blacketScope("Xo") as React.FC<{ header: HeaderProps, children: React.ReactNode }>;
+    const { blacketScope } = (BPP.pluginManager.getPlugin("Internals") as InternalsPlugin);
+    // https://github.com/BlacketPS/frontend/blob/c2aaaef6f8938f77ff46881fd2f04310220fe906/src/components/PageHeader/index.tsx#L5
+    const PageHeader = blacketScope("Ye") as React.FC<{ children: React.ReactNode }>;
+    // https://github.com/BlacketPS/frontend/blob/c2aaaef6f8938f77ff46881fd2f04310220fe906/src/views/Settings/components/SettingsContainer.tsx#L5
+    const Container = blacketScope("js") as React.FC<{ header: HeaderProps, children: React.ReactNode }>;
     const dashboardStyles = (BPP.pluginManager.getPlugin("Internals") as InternalsPlugin).styles.dashboard as DashboardStyles;
 
-    const { useEffect, useState } = (BPP.pluginManager.getPlugin("Internals") as InternalsPlugin).vendors.normalized.React;
+    const { useEffect, useState } = BPP.vendorManager.getVendorByName("React");
 
-    // will have to do it this way as it seems the imported name for useNavigate is in conflict
-    const navigate = vendors.vendors["u"]() as (path: string) => void;
+    const navigate = BPP.vendorManager.getVendorByName("useNavigate");
 
     const settings = useSettings();
 
@@ -36,7 +37,7 @@ export default () => {
                 <div className={`${dashboardStyles.topRightButton} ${styles.styledButton}`} onClick={() => {
                     navigate("/bpp");
                 }}>
-                    <i className="fas fa-arrow-left" style={{ fontSize: "40px "}} />
+                    <i className="fas fa-arrow-left" style={{ fontSize: "40px " }} />
                 </div>
                 <div style={{
                     height: "20vh"

@@ -1,14 +1,18 @@
-import logger, { Logger } from "#utils/logger";
+import { Logger } from "#utils/logger";
 
 import PluginManager from "#plugin/pluginManager";
 import SettingsManager from "#settings/settingsManager";
 import events from "#utils/eventManager";
 import { PatchManager } from "#patcher/hard";
 import { Devs, devsArray } from "#utils/consts";
+import { StoreManager } from "#api/stores";
+import { VendorManager } from "#api/vendors";
 
-class BPPClass extends Logger {
+export class BPPClass extends Logger {
     public pluginManager: PluginManager = new PluginManager();
     public patchManager: PatchManager = new PatchManager();
+    public storeManager: StoreManager = new StoreManager();
+    public vendorManager: VendorManager = new VendorManager([]);
     public settingsManager: SettingsManager = new SettingsManager();
     public pages: any = {}
     public consts = {
@@ -21,9 +25,9 @@ class BPPClass extends Logger {
 
     constructor() {
         super("BPP", "#5BCEFA");
-
         this.pluginManager.init();
         this.patchManager.init();
+        this.storeManager.init(this);
 
         this.patchManager.addPatches(this.pluginManager.getPlugins().map((plugin) => plugin.patches).flat());
         this.patchManager.softReload(true);
@@ -31,8 +35,8 @@ class BPPClass extends Logger {
 }
 
 const BPP = new BPPClass();
-
 window.BPP = BPP;
+
 
 (async () => {
     if (isDev) {
